@@ -207,17 +207,20 @@ def quiz(request):
         content = Content.objects.get(pk=cid)
         score = 0
         questions = []
-        a = [0 for x in range(10)]
+        a = [0 for x in range(1,11)]
         for q in range(1,10):
             qp = request.POST.get(str(q))
             que = Question.objects.get(pk=qp)
             o = request.POST.get(que.question)
             questions.append(que)
-            if o == que.answer:
-                a[q] = "correct"
-                score = score + 1
+            if o:
+                if o == que.answer:
+                    a[q] = "correct"
+                    score = score + 1
+                else:
+                    a[q] = "incorrect"
             else:
-                a[q] = "incorrect"
+                a[q] = "not attempted"
         option = Option.objects.filter(Q(question_id__in=questions))
         context = {'content': content, 'option': option, 'a': a, 'questions': questions, 'score': score}
         return render(request, "epsilon/quiz.html", context)
