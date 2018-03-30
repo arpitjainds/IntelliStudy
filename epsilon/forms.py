@@ -1,5 +1,5 @@
 from django import forms
-from .models import ExtraInfo
+from .models import ExtraInfo, File
 
 class AddInformation(forms.Form):
     fname = forms.CharField(widget=forms.TextInput(attrs={'max_length': 2,
