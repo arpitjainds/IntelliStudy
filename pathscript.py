@@ -1,50 +1,29 @@
 import xlrd
 import os
-from epsilon.models import Question, Option, Course, Content
+from epsilon.models import Career, Course, Has
 
 skillexcel= xlrd.open_workbook(os.path.join(os.getcwd(), 'data.xlsx'))
 z = skillexcel.sheet_by_index(0)
 
-for i in range(0, 20):
+for i in range(1, 5):
 	try:
-		course = Course.objects.get(name='Blockchain')
-		content = Content.objects.get(course_id=course, name='Bitcoin')
-		question = z.cell(i, 0).value
-		print(question)
-		level = z.cell(i, 7).value
-		print(level)
-		option_a = z.cell(i, 1).value
-		option_b = z.cell(i, 2).value
-		option_c = z.cell(i, 3).value
-		option_d = z.cell(i, 4).value
-		option_e = z.cell(i, 5).value
+		for j in range(1,19):
+			part = int(z.cell(i+1,j).value)
+			print(part)
+			part = part.split(",")
+			if part[0] == '1':
 
-		answer = z.cell(i,6).value
-		print(answer)
+				course_name = z.cell(1,j).value
+				career_name = z.cell(i,1).value
 
-		if level == 'b' :
-				level = 'beginner'
-		elif level == 'i' :
-				level = 'intermediate'
-		else :
-				level = 'advanced'
 
-		quiz = Question.objects.create(
-				content_id = content,
-				level = level,
-				question = question,
-				answer = answer
+				course = Course.objects.create(name=course_name)
+				career = Career.objects.create(name=career_name)
 
-			)
-		print(quiz)
-		options = Option.objects.create(
-				question_id = quiz,
-				option_a = option_a,
-				option_b = option_b,
-				option_c = option_c,
-				option_d = option_d,
-				option_e = option_e
-			)
+				path = Has.objects.create(career_id=career, course_id=course, level='intermediate', order=part[2])
+
+			else:
+				continue
 
 		print (str(i) + "done")
 
