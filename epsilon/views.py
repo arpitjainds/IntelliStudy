@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from .models import (Course, Enroll, Student, Mentor, Question, ExtraInfo, Content, Manage, Score,
                      File, Option, Contain, Group, Career, Has)
+from .forms import AddSubtopic
 
 
 def auth(request):
@@ -38,7 +39,7 @@ def auth(request):
         if extrainfo.user_type == "student":
             return redirect('/epsilon/dashboard')
         else:
-            return rediect('/epsilon/mdashboard')
+            return redirect('/epsilon/mdashboard')
     else:
         return redirect('/epsilon')
 
@@ -358,8 +359,10 @@ def editquiz(request):
 
 @login_required
 def editcourse(request):
-    courses = Course.objects.all()
-    context = {'courses': courses}
+    course = Course.objects.get(id = request.POST['course'])
+    contents = Content.objects.filter(course_id = request.POST['course'])
+    context = {'contents': contents,
+                'course': course}
     return render(request, "epsilon/editcourse.html", context)
 
 
