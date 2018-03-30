@@ -19,25 +19,42 @@
   <body>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-    <a class="navbar-brand" href="/epsilon"><img src="{% static 'epsilon/assets/img/index/mainname.png' %}" height=45px /></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+                <div class="container">
+  <a class="navbar-brand" href="#">intellistudy</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-    <div class="collapse navbar-collapse" id="navbarColor03">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="/epsilon/mycourses">My Courses <span class="sr-only" style="color:#3d3d3d">(current)</span></a>
-            </li>
-        </ul>
-        <ul class="nav justify-content-end">
-            <li class="nav-item">
-                <a class="nav-link" href="/epsilon/profile">Profile</a>
-            </li>
-        </ul>
-    </div>
-    </div>
+  <div class="collapse navbar-collapse" id="navbarColor03">
+      <img src="{% static 'epsilon/assets/img/logo_2.png' %}" height=40px />
+      
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+                        <a class="nav-link" href="/epsilon/mycourses">Courses <span class="sr-only" style="color:#3d3d3d">(current)</span></a>
+                    </li>
+      <li class="nav-item active">
+                        <a class="nav-link" href="/epsilon/profile">Profile</a>
+                    </li>
+      <li class="nav-item active">
+                        <a class="nav-link" href="/epsilon/profile">Logout</a>
+                    </li>
+    </ul>
+      <ul class="navbar-nav">
+      <li class="nav-item active">
+        <input type="button" value="+A" class="increaseFont">
+      </li>
+      <li class="nav-item">
+        <input type="button" value="-A" class="decreaseFont">
+      </li>
+    </ul>
+<!--
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="text" placeholder="Search">
+      <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+    </form>
+-->
+  </div>
+  </div>
 </nav>
 
       <div class="jumbotron" style="color: #2c2828;background: #d0e8f0">
@@ -181,19 +198,47 @@
 
   </div></div>
 {% endif %}
-  <div class="container">
-  <div class="row">
-  <div class="col-lg-12"><hr style=" border: 2px solid #3d3d3d;">
-  <ul class="list-unstyled">
-    <li class="float-lg-right"><a href="#top">Back to top</a></li>
-    <li><a href="/epsilon/about">About</a></li>
-    <li><a href="https://github.com/gautamyadavs/IntelliStudy">Source | GitHub</a></li>
-  </ul>
-  <center><p>Made with <img src="{% static 'epsilon/assets/img/index/heart.png' %}" width=18px /> by <a href="/epsilon/about">Team Epsilon</a>.</p></center>
-  </div>
-  </div>
+   <div class="btm_logoWrap">
+    <div class="container">
+      <div class="btm_logo"> <div class="region region-footer-logo">
+  <div id="block-block-137" class="block block-block" role="contentinfo">
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="{% static '../../../../epsilon/assets/js/vendor/jquery-slim.min.js' %}"><\/script>')</script>
+      
+  <div class="row">
+        <div class="container">
+		<a href="https://india.gov.in/" target="_blank" title="india.gov.in"><img alt="india.gov.in" height="51" src="{% static 'epsilon/assets/img/india_gov_logo.png' %}" width="137"></a>
+		<a href="http://mygov.in/" target="_blank" title="MyGov.in"><img alt="MyGov.in" height="51" src="{% static 'epsilon/assets/img/my_gov_logo.png' %}" width="61"></a>
+		<a href="http://evisitors.nic.in/public/Home.aspx" target="_blank" title="MyVisit"><img alt="MyVisit" height="51" src="{% static 'epsilon/assets/img/my_visit.png' %}" width="98"></a>
+		<a href="http://digitalindia.gov.in/" target="_blank" title="Digital India"><img alt="Digital India" height="51" src="{% static 'epsilon/assets/img/digital_india.png' %}" width="78"></a>
+		<a href="rti_he" title="Right to Information"><img alt="Right to Information" height="51" src="{% static 'epsilon/assets/img/rti_logo.png' %}" width="78"></a>
+		<a href="https://data.gov.in/" target="_blank" title="data.gov.in"><img alt="data.gov.in" height="51" src="{% static 'epsilon/assets/img/datagov_logo.png' %}" width="110"></a>
+		<a href="http://www.nvsp.in/" target="_blank" title="Online Services for Voters"><img alt="Online Services for Voters" height="51" src="{% static 'epsilon/assets/img/onlineservice_logo.png' %}" width="113"></a>
+		<a href="http://dial.gov.in/" target="_blank" title="Dial.gov"><img alt="Dial.gov" height="51" src="{% static 'epsilon/assets/img/dialgov-logo.png' %}" width="64"></a>
+		<a href="http://ssashagun.nic.in/" target="_blank" title="ssa.gov"><img alt="ssa" height="51" src="{% static 'epsilon/assets/img/ssa_schm.jpg' %}" width="112"></a>
+		<a href="http://mdm.nic.in/" target="_blank" title="Mid Day Meal"><img alt="Mid Day Meal" height="51" src="{% static 'epsilon/assets/img/mdm_schm.jpg' %}" width="112"></a>
+        <a href="http://103.7.128.243:8085/swachhvidhyalaya/" target="_blank" title="MHRD"><img src="{% static 'epsilon/assets/img/swachh-vidyalay.png' %}" alt="" class="img-responsive"></a>
+  </div>
+  </div>
+  
+</div> <!-- /.block -->
+</div>
+ <!-- /.region -->
+ </div>
+    </div>
+  </div>
+            <div class="container">
+            <div class="row">
+            <div class="col-lg-12"><hr style=" border: 0.5px solid #3d3d3d;">
+            <ul class="list-unstyled">
+              <li class="float-lg-right"><a href="#top">Back to top</a></li>
+              <li><a href="/epsilon/about">About</a></li>
+              <li><a href="https://github.com/gautamyadavs/IntelliStudy">Source | GitHub</a></li>
+            </ul>
+            <center><p>Made with <img src="{% static 'epsilon/assets/img/index/heart.png' %}" width=18px /> by <a href="/epsilon/about">Team Epsilon</a>.</p></center>
+            </div>
+            </div>
+
+        </div>
+        </div>
   </body>
 </html>
