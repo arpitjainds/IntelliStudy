@@ -203,18 +203,23 @@ def quiz(request):
         context = {'content': content, 'questions': questions, 'option': option}
         return render(request, "epsilon/quiz.html", context)
     if 'give' in request.POST:
-        questions = request.POST['give']
-        for q in questions:
-            print(q)
-        option = Option.objects.filter(Q(question_id__in=questions))
-        content = Question.objects.filter(Q(pk__in=questions)).values('content_id_id')
-        for q in questions:
-            o = request.POST.get('q.question','')
-            if o == q.answer:
-                a['q'] = "correct"
+        cid = request.POST['give']
+        content = Content.objects.get(pk=cid)
+        score = 0
+        questions = []
+        a = [0 for x in range(10)]
+        for q in range(1,10):
+            qp = request.POST.get(str(q))
+            que = Question.objects.get(pk=qp)
+            o = request.POST.get(que.question)
+            questions.append(que)
+            if o == que.answer:
+                a[q] = "correct"
+                score = score + 1
             else:
-                a['q'] = "incorrect"
-        context = {'content': content, 'questions': questions, 'option': option, 'a': a}
+                a[q] = "incorrect"
+        option = Option.objects.filter(Q(question_id__in=questions))
+        context = {'content': content, 'option': option, 'a': a, 'questions': questions, 'score': score}
         return render(request, "epsilon/quiz.html", context)
 
 
