@@ -196,7 +196,7 @@ class RBM:
 
 if __name__ == '__main__':
     #taking data from data.xlsx and putting in array arr
-    skillexcel= xlrd.open_workbook(os.path.join(os.getcwd(), 'data.xlsx'))
+    skillexcel= xlrd.open_workbook(os.path.join(os.getcwd(), 'data1.xlsx'))
     z = skillexcel.sheet_by_index(0)
     arr = []
     for i in range(1, 16):
