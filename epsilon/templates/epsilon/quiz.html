@@ -65,7 +65,8 @@
                           {% for o in option %}
                           {% if o.question_id == q %}
                               <fieldset class="form-group">
-                                                  <legend><h4>  {{ q.question }} {% if a %}{% if a.q == "correct" %}<img style="float:right;" src="assets/img/right.png" width=25px>{% else %} <img style="float:right;" src="assets/img/cross.png" width=25px> {% endif %}{% endif %} </h4></legend>
+                                                  <legend><h4>  {{ q.question }} {% if a %}{% if a.q == "correct" %}<img style="float:right;" src="{% static 'epsilon/assets/img/right.png' %}" width=25px>{% else %} <img style="float:right;" src="{% static 'epsilon/assets/img/cross.png' %}" width=25px> {% endif %}{% endif %} </h4></legend>
+                                                  <input hidden="" type="text" name="{{forloop.counter}}" value="{{q.pk}}">
                                                   <div class="form-check">
                                                     <label class="form-check-label">
                                                       <input type="radio" class="form-check-input" name="{{q.question}}" id="optionsRadios{{forloop.counter}}1" value="{{ o.option_a }}">
@@ -107,7 +108,7 @@
                         {% if a %}
                         <div class="row"><div class="offset-lg-7 col-lg-2"><center><button type="submit" name="content" value="{{ content.pk }}" class="btn btn-primary">Go back</button></center></div></div>
                         {% else %}
-                                                <div class="row"><div class="offset-lg-7 col-lg-2"><center><button type="submit" name="give" value="{{questions}}" class="btn btn-primary">Submit</button></center></div></div>
+                                                <div class="row"><div class="offset-lg-7 col-lg-2"><center><button type="submit" name="give" value="{{content.pk }}" class="btn btn-primary">Submit</button></center></div></div>
                         {% endif %}
                         </form><br>
                       </div>
