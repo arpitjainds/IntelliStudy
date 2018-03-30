@@ -40,3 +40,8 @@ class AddInformation(forms.Form):
     qualification = forms.CharField(widget=forms.TextInput(attrs={'max_length': 40,
                                                          'class': 'custom-select'}),
                                     label="exampleselect3")
+
+class AddSubtopic(forms.ModelForm):
+    class Meta:
+        model = File
+        fields = ('content_id','mentor_id','file', 'name',)

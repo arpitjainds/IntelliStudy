@@ -75,106 +75,24 @@
 
           <div class="row"><div class="col-lg-10 offset-lg-1">
 
+            {% for c in contents%}
+
             <div class="card-deck">
               <div class="col-lg-3">
               <div class="card">
                 <img class="card-img-top" src="{% static 'epsilon/assets/img/course.png' %}" alt="Card image cap">
                 <div class="card-body">
-                  <h5 class="card-title">Sub Topic</h5>
-                  <p class="card-text">Description.</p>
+                  <h5 class="card-title">{{c.name}}</h5>
+                  <p class="card-text">{{c.description}}</p>
                 </div>
                       <button type="button" class="btn btn-secondry">Edit</button>
                       <button type="button" class="btn btn-danger">Delete</button>
               </div>
               </div>
 
-              <div class="col-lg-3">
-              <div class="card">
-                <img class="card-img-top" src="{% static 'epsilon/assets/img/course.png' %}" alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Sub Topic</h5>
-                  <p class="card-text">Description.</p>
-                </div>
-                <button type="button" class="btn btn-secondry">Edit</button>
-                <button type="button" class="btn btn-danger">Delete</button>
+              
               </div>
-                </div>
-
-                <div class="col-lg-3">
-              <div class="card">
-                <img class="card-img-top" src="{% static 'epsilon/assets/img/course.png' %}" alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Sub Topic</h5>
-                  <p class="card-text">Description.</p>
-                </div>
-                <button type="button" class="btn btn-secondry">Edit</button>
-                <button type="button" class="btn btn-danger">Delete</button>
-              </div>
-                </div>
-
-                <div class="col-lg-3">
-              <div class="card">
-                <img class="card-img-top" src="{% static 'epsilon/assets/img/course.png' %}" alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Sub Topic</h5>
-                  <p class="card-text">Description.</p>
-                </div>
-                <button type="button" class="btn btn-secondry">Edit</button>
-                <button type="button" class="btn btn-danger">Delete</button>
-              </div>
-            </div>
-              </div>
-
-            <div class="row"><p><br><br></p></div>
-
-            <div class="card-deck">
-              <div class="col-lg-3">
-              <div class="card">
-                <img class="card-img-top" src="{% static 'epsilon/assets/img/course.png' %}" alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Sub Topic</h5>
-                  <p class="card-text">Description.</p>
-                </div>
-                <button type="button" class="btn btn-secondry">Edit</button>
-                <button type="button" class="btn btn-danger">Delete</button>
-              </div>
-              </div>
-
-              <div class="col-lg-3">
-              <div class="card">
-                <img class="card-img-top" src="{% static 'epsilon/assets/img/course.png' %}" alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Sub Topic</h5>
-                  <p class="card-text">Description.</p>
-                </div>
-                <button type="button" class="btn btn-secondry">Edit</button>
-                <button type="button" class="btn btn-danger">Delete</button>
-              </div>
-                </div>
-
-                <div class="col-lg-3">
-              <div class="card">
-                <img class="card-img-top" src="{% static 'epsilon/assets/img/course.png' %}" alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Sub Topic</h5>
-                  <p class="card-text">Description.</p>
-                </div>
-                <button type="button" class="btn btn-secondry">Edit</button>
-                <button type="button" class="btn btn-danger">Delete</button>
-              </div>
-                </div>
-
-                <div class="col-lg-3">
-              <div class="card">
-                <img class="card-img-top" src="{% static 'epsilon/assets/img/course.png' %}" alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Sub Topic</h5>
-                  <p class="card-text">Description.</p>
-                </div>
-                <button type="button" class="btn btn-secondry">Edit</button>
-                <button type="button" class="btn btn-danger">Delete</button>
-              </div>
-            </div>
+              {%endfor%}
               </div>
 
             <div class="row"><p><br><br></p></div>

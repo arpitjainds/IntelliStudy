@@ -316,15 +316,33 @@ def mdashboard(request):
 @login_required
 def manage(request):
     user = request.user
-    courses = Course.objects.filter(Q(pk__in=Manage.objects.filter(Q(mentor_id__in=Mentor.objects.filter(Q(mentor_id__in=ExtraInfo.objects.filter(Q(user=user)))))).values('course_id_id')))
+    m = ExtraInfo.objects.get(user = user)
+    mentor = Mentor.objects.get(mentor_id = m)
+    man = Manage.objects.filter(mentor_id = mentor)
+    courses = []
+    for i in man:
+        c = Course.objects.get(id=i.course_id.id)
+        courses.append(c)
     context = {'courses': courses}
     return render(request, "epsilon/managecourses.html", context)
 
 
 @login_required
 def edittopic(request):
-    courses = Course.objects.all()
-    context = {'courses': courses}
+    user = request.user
+    m = ExtraInfo.objects.get(user = user)
+    mentor = Mentor.objects.get(mentor_id = m)
+    content = Content.objects.get(id = request.POST['content'])
+    form = AddSubtopic()
+    context = {'content': content,
+                'form' : form}    
+    if request.method == 'POST' and request.FILES:
+        fileForm = AddSubtopic(initial={'content_id':content,
+                                        'mentor_id':mentor})
+        fileForm = AddSubtopic(request.FILES, request.POST)
+        if fileForm.is_valid():
+            print("kkkkkk")
+            fileForm.save()
     return render(request, "epsilon/editsubtopic.html", context)
 
 

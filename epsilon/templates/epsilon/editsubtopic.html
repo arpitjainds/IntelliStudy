@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <link rel="icon" href="{% static 'epsilon/assets/img/favicons/logo.png' %}">
 
-      <title>Subtopic Name - Course Name</title>
+      <title>{{content.name}} - Course Name</title>
 
       <!-- Bootstrap core CSS -->
       <script src="{% static 'epsilon/assets/js/jquery-3.2.1.slim.min.js' %}"></script>
@@ -43,7 +43,7 @@
         <div class="jumbotron" style="color: #2c2828;background: #d0e8f0">
           <div class="row">
           <div class="col-lg-7 offset-lg-1">
-          <h1 class="display-3" style="color: #2c2828;">Subtopic Name</h1><br><h3>Course Name</h3><hr>
+          <h1 class="display-3" style="color: #2c2828;">{{content.name}}</h1><br><h3>Course Name</h3><hr>
           <p class="lead">Edit the Subtopic contents below.</p>
           </div>
 
@@ -129,29 +129,26 @@
 
                     <div id="collapseOne" class="collapse hide" aria-labelledby="headingOne" data-parent="#accordion">
                           <br>
-                          <form>
-                            <fieldset>
 
+                          <form action="/epsilon/edittopic" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <fieldset>                              
                           <div class="form-group">
                             <label class="col-form-label" for="inputDefault"></label>
-                            <input type="text" class="form-control" placeholder="Enter the Resource Title" id="inputDefault1">
-                          </div>
-
-                          <div class="form-group">
-                            <label hidden="" class="col-form-label" for="inputDefault2"></label>
-                            <input type="text-area" class="form-control" placeholder="Enter the Description" id="inputDefault2">
-                          </div>
+                            {{form.name}}
+                          </div>         
 
                           <div class="form-group">
                             <button class="btn btn-primary">
                             <label for="exampleInputFile"><h5 style="color:#ffffff;">Upload resource file</h5></label>
-                            <center><input style="color:#d0e8f0; display:none" type="file" class="form-control-file btn btn-sm btn-secondary" id="exampleInputFile" aria-describedby="fileHelp"></center></button>
+                            <center>{{form.file}}</center></button>
                           </div>
 
-                       </fieldset>
-                     </form>
+                         <center><button type="submit" value ="{{content.id}}" name="content" class="btn btn-primary">Submit</button></center>
 
-                         <center><button type="submit" class="btn btn-primary">Submit</button></center>
+                         </fieldset>
+                     </form>
+                     
                     </div>
             </div>
 
