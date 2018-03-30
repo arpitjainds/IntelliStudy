@@ -8,7 +8,7 @@ z = skillexcel.sheet_by_index(0)
 for i in range(1, 5):
 	try:
 		for j in range(1,19):
-			part = int(z.cell(i+1,j).value)
+			part = z.cell(i+1,j).value
 			print(part)
 			part = part.split(",")
 			if part[0] == '1':
@@ -16,11 +16,14 @@ for i in range(1, 5):
 				course_name = z.cell(1,j).value
 				career_name = z.cell(i,1).value
 
+				print(course_name)
+				print(career_name)
+				print(level)
+				print(part[1])
+				# course = Course.objects.create(name=course_name)
+				# career = Career.objects.create(name=career_name)
 
-				course = Course.objects.create(name=course_name)
-				career = Career.objects.create(name=career_name)
-
-				path = Has.objects.create(career_id=career, course_id=course, level='intermediate', order=part[2])
+				# path = Has.objects.create(career_id=career, course_id=course, level='intermediate', order=part[1])
 
 			else:
 				continue
