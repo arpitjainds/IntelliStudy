@@ -5,9 +5,14 @@
           <title>IntelliStudy</title>
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
-          <link rel="stylesheet" type="text/css" href="{% static 'epsilon/assets/css/bootstrap.css' %}">
-            <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+            
+            
+      <script src="{% static 'epsilon/assets/js/jquery-3.2.1.slim.min.js' %}"></script>
+      <script src="{% static 'epsilon/assets/js/bootstrap.min.js' %}"></script>
+      <script src="{% static 'epsilon/assets/js/popper.min.js' %}"></script>
+      <script src="{% static 'epsilon/assets/js/jquery-3.2.1.slim.min.js' %}"></script>
+      <link rel="stylesheet" type="text/css" href="{% static 'epsilon/assets/css/bootstrap.css' %}">
+            
         <script type="text/javascript">
  $(document).ready(function(){
   $(".increaseFont,.decreaseFont").click(function(){
@@ -39,13 +44,13 @@
       
     <ul class="nav justify-content-end">
       <li class="nav-item active">
-        <a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="#features">features</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">About</a>
+        <a class="nav-link" href="/epsilon/about">About</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Contact</a>
+        <a class="nav-link" href="/epsilon/about#members">Contact</a>
       </li>
     </ul>
 
@@ -63,9 +68,9 @@
   </div>
 </nav>
 
-        <div class="jumbotron-fluid" style="height:70vh; background-color: #f7f7f9; background-image: url({% static 'epsilon/assets/img/poor.png' %});color:white;background-position: right center;">
-        <div class="container" style="text-align: center;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);color:white">
-        <h1 style="color:white;"><img src="{% static 'epsilon/assets/img/index/mainnamewhite.png' %}" height=138px /></h1>
+        <div class="jumbotron-fluid" style="height:70vh; background-color: #f7f7f9;background-image: url({% static 'epsilon/assets/img/poor.png' %});color:white;background-position: right center;opacity:0.9;">
+        <div class="container" style="text-align: center;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);color:white; ">
+        <h1 style="color:white;"><img src="{% static 'epsilon/assets/img/index/mainnamewhite.png' %}" height=138px/></h1>
         <p class="lead">A Powerful E-learning platform.</p>
         <hr style=" border: 0.5px solid #fff;"><br><br><br><br><br><br>
         <p>Login to get started.</p>
@@ -75,48 +80,46 @@
         </p>
         </div>
         </div>
-    <div class="container-fluid" style="background-image: url({% static 'epsilon/assets/img/dpt_bg.jpg' %});"><div class="container"><img src="{% static 'epsilon/assets/img/minister.png' %}" width="200"></div></div>
+    <div class="container-fluid" style="background-image: url({% static 'epsilon/assets/img/dpt_bg.jpg' %});"><div class="row"><div class="col-3 offset-1"><img src="{% static 'epsilon/assets/img/minister.png' %}" height="90"></div><div class="col-3"><img src="{% static 'epsilon/assets/img/narendra.png' %}" height="90"></div><div class="col-3"><img src="{% static 'epsilon/assets/img/gandhi.png' %}" height="90"></div></div></div>
 
         <div class="row" id="features"><div class="col-lg-7 offset-lg-1">
+            
+            <div class="row"><div><p><br></p></div></div>
 
-        <div class="container-fluid" style="height:40%;">
-        <div class="container" style="height:13%"></div>
+        <div class="container" style=""></div>
             <div class="card">
                 <div class="row">
-                <div class="col-4"><img src="{% static 'epsilon/assets/img/index/grad.jpg' %}" width="200"></div>
-                <div class="col-8">
-                    <div class="container" style="height:10%"></div>
+                <div class="col-4 offset-lg-1"><div class="container" style=""></div><img style="padding-top:10px; padding-bottom:10px" src="{% static 'epsilon/assets/img/collegestudent.jpg' %}" width="250"></div>
+                <div class="col-6">
+                    <div class="container"></div><br>
                     <p>The objective is to use artificial intelligence to make the educational experience easier, better and more effective. A system that takes care of the needs of different students differently through the application of greater levels of individualized learning. In regular classroom learning, students differ in terms of their learning abilities and thus a common teaching source can’t ensure proper learning of every student. Our system trains according to the abilities of different students differently and thus provides a custom and personal learning experience.
 </p>
                 </div>
                 </div>
             </div>
-        </div>
 
-        <div class="container-fluid" style="height:40%;">
-            <div class="card" style="height:50%;">
+            <div class="card" style="">
                 <div class="row">
-                <div class="col-7 offset-lg-1">
-                    <div class="container" style="height:10%"></div>
+                <div class="col-6 offset-lg-1">
+                    <div class="container" ></div><br>
                     <p>This platform provided to the students promotes learning together, in one’s own time zone and pace. This kind of custom-tailored education helps reduce pressure on the student as well as improves performance. The interaction between peers while learning builds up confidence as well as makes learning a fun process.</p>
                 </div>
-                <div class="col-4"><img src="{% static 'epsilon/assets/img/index/bulb.jpg' %}" width="190"></div>
+                <div class="col-3 offset-lg-1"><img style="padding-top:20px; padding-bottom:10px" src="{% static 'epsilon/assets/img/college.jpg' %}" width="250"></div>
                 </div>
             </div>
-        </div>
 
-        <div class="container-fluid" style="height:40%;">
-            <div class="card" style="height:70%;">
+           <div class="card" style="">
                 <div class="row">
-                <div class="col-4"><img src="{% static 'epsilon/assets/img/index/focus.jpg' %}" width="190"></div>
-                <div class="col-8">
-                    <div class="container" style="height:10%"></div>
+                <div class="col-4 offset-lg-1"><div class="container" style=""></div><img style="padding-top:20px; padding-bottom:10px" src="{% static 'epsilon/assets/img/student.jpg' %}" width="250"></div>
+                <div class="col-6">
+                    <div class="container"></div><br>
                     <p>It helps the student know the career path as that is one thing most of the students are always confused about. From what to study to how to study to interactive group chats, quizzes and assignments, it takes care of all the needs of the student such as recommended courses, progress rate, etc. The group chat is a medium for like minded people to share their thoughts and help each other out, to create a healthy atmosphere as well as motivate the student. The student can connect with the mentors of the courses as well for any queries. This will enable the student to be more open, interactive and grow along with others thereby improving the quality of education in the nation. Its not just the intellect that adds on but also improves the student's interactive skills. </p>
                 </div>
                 </div>
             </div>
-        </div>
 
+             <div class="row"><div><p><br></p></div></div>
+            
         </div>
             <div class="col-lg-3">
                 <div class="container" style="height:5%;"></div>

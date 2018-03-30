@@ -41,11 +41,12 @@
   </nav>
 
         <div class="jumbotron" style="color: #ffffff;background: #d0e8f0">
+          <form method="POST" action="/epsilon/update_profile">
           <div class="row">
           <div class="col-lg-6 offset-lg-1">
 
 
-            <form method="POST" action="/epsilon/update_profile">
+            
               {% csrf_token %}
               <fieldset>
                 <div class="form-group">
@@ -87,21 +88,25 @@
 
                 <button type="submit" class="btn btn-secondary">Submit</button>
              </fieldset>
-           </form>
 
 
           </div>
 
           <div class="col-lg-3 offset-lg-1">
-              <img class="card-img-top" style="border-radius:600px ;width:300px; padding top:20px" src="{% static 'epsilon/assets/img/members/arpit.jpg' %}" alt="Card image cap">
+            {% if extrainfo.profile_picture %}
+              <img class="card-img-top" style="border-radius:600px ;width:300px; padding top:20px" src="{{ extrainfo.profile_picture.url }}" alt="Card image cap">
+            {% else %}
+            <img class="card-img-top" style="border-radius:600px ;width:300px; padding top:20px" src="{% static 'epsilon/assets/img/mentor.jpg' %}" alt="Card image cap">
+            {% endif %}
               <div class="row"><div class="offset-lg-3"><p><br><h2><center style="color:white">{{user.first_name}} {{user.last_name}}</center></h2></p></div></div>
               <div class="form-group">
                 <button class="btn btn-secondary">
                 <label for="exampleInputFile"><h5>Change Profile Picture</h5></label>
-                <center><input style="color:#d0e8f0; display:none" type="file" class="form-control-file btn btn-sm btn-secondary" id="exampleInputFile" aria-describedby="fileHelp"></center></button>
+                <center><input style="color:#d0e8f0; display:none" type="file" class="form-control-file btn btn-sm btn-secondary" id="exampleInputFile" name="profile_pic" aria-describedby="fileHelp"></center></button>
               </div>
           </div>
         </div>
+      </form>
 
       </div>  <div class="row"><p><br><br><br><br></p></div>
 

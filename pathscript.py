@@ -4,32 +4,22 @@ from epsilon.models import Career, Course, Has
 
 skillexcel= xlrd.open_workbook(os.path.join(os.getcwd(), 'data.xlsx'))
 z = skillexcel.sheet_by_index(0)
-
-for i in range(1, 5):
+arr = []
+for i in range(1, 16):
+	row = []
 	try:
-		for j in range(1,19):
-			part = z.cell(i+1,j).value
-			print(part)
-			part = part.split(",")
-			if part[0] == '1':
-
-				course_name = z.cell(1,j).value
-				career_name = z.cell(i,1).value
-
-				print(course_name)
-				print(career_name)
-				print(level)
-				print(part[1])
-				# course = Course.objects.create(name=course_name)
-				# career = Career.objects.create(name=career_name)
-
-				# path = Has.objects.create(career_id=career, course_id=course, level='intermediate', order=part[1])
-
-			else:
-				continue
-
+		for j in range(0,18):
+			print("career",z.cell(i,0).value)
+			print(z.cell(i,j+1).value)
+			row.append(int(z.cell(i,j+1).value))
+			print("\n")
+	
 		print (str(i) + "done")
+
 
 	except Exception as e:
 		print(e)
 		print(i)
+	arr.append(row)
+	
+print(arr)

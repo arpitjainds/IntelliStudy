@@ -5,6 +5,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.shortcuts import render_to_response
+from django.template.context import RequestContext
 from django.contrib.auth.models import User
 from django.db.models import Q
 from .models import (Course, Enroll, Student, Mentor, Question, ExtraInfo, Content, Manage, Score,
@@ -38,7 +40,7 @@ def auth(request):
         if extrainfo.user_type == "student":
             return redirect('/epsilon/dashboard')
         else:
-            return rediect('/epsilon/mdashboard')
+            return redirect('/epsilon/mdashboard')
     else:
         return redirect('/epsilon')
 
@@ -247,12 +249,24 @@ def update_profile(request):
     extrainfo = ExtraInfo.objects.get(user=user)
     job = request.POST.get("job_opt")
     qualification = request.POST.get("qualify_opt")
+    
     password = request.POST.get("password")
+    print(password)
     extrainfo.job = job
     extrainfo.qualification = qualification
+    extrainfo.profile_picture = request.POST.get("profile_pic")
+    print(extrainfo)
     extrainfo.save()
-    user.set_password(password)
-    user.save()
+
+    if password is not "":
+        user.set_password(password)
+        user.save()
+
+    # if 'change_pic' in request.POST:
+    #     pic = request.POST.get("profile_pic")
+    #     extrainfo.profile_picture = pic
+    #     extrainfo.save()
+
     context = {'extrainfo': extrainfo, 'user':user}
 
     profile(request)
@@ -367,3 +381,4 @@ def editcourse(request):
 def loggedout(request):
     logout(request)
     return redirect('/epsilon')
+

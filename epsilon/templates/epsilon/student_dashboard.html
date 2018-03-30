@@ -5,8 +5,33 @@
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
           <link rel="stylesheet" type="text/css" href="{% static 'epsilon/assets/css/bootstrap.css' %}">
+            
+      <script src="{% static 'epsilon/assets/js/jquery-3.2.1.slim.min.js' %}"></script>
+      <script src="{% static 'epsilon/assets/js/bootstrap.min.js' %}"></script>
+      <script src="{% static 'epsilon/assets/js/popper.min.js' %}"></script>
+      <script src="{% static 'epsilon/assets/js/jquery-3.2.1.slim.min.js' %}"></script>
+      <link rel="stylesheet" type="text/css" href="{% static 'epsilon/assets/css/bootstrap.css' %}">
+            
+            
+                    <script type="text/javascript">
+ $(document).ready(function(){
+  $(".increaseFont,.decreaseFont").click(function(){
+  var type=  $(this).val();
+   var curFontSize = $('.data').css('font-size');
+   if(type=='+A'){
+    $('.data').css('font-size', parseInt(curFontSize)+1);
+    }
+   else{
+    $('.data').css('font-size', parseInt(curFontSize)-1);
+   }});
+
+
+ });
+ </script>
+
+            
         </head>
-        <body>
+        <body><div class="data">
 
 <!--            NAV BAR-->
             
@@ -48,8 +73,8 @@
   </div>
   </div>
 </nav>
-            <div class="container-fluid" style="background-color: #f7f7f7; background-image: url('{% static 'epsilon/assets/img/dash_back.png' %}'); height:65%; background-repeat:no-repeat; background-position:center">
-            <div class="container" style="text-align: center;position: absolute;top: 60%;left: 50%;transform: translate(-50%, -50%);">
+            <div class="container-fluid" style="background-color: #f7f7f7; background-image: url('{% static 'epsilon/assets/img/dash_back.png' %}'); height:65%">
+            <div class="container" style="text-align: center;position: absolute;top: 40%;left: 50%;transform: translate(-50%, -50%);">
             <div class="row">
             <div class="col-2"></div>
             <div class="col-8">
@@ -68,41 +93,47 @@
             </div>
             </div>
             </div>
-            <div class="container" style="height:15%"></div>
-            <div class="text-center"><h3>Career Path</h3></div><br><br>
-            <div class="container" style="height:35%">
+            
+            <div class="container"><p><br><br></p></div>
+            <div class="text-center"><h3>Career Path</h3></div><br>
+            <div class="container">
                 <div class="row">
-                <div class="col-2"></div>
-                {% for path in career %}
+                    {% for path in career %}
+                    <div class="col-3">
                 <form action=/epsilon/career method="post" class="ui form" role="form">
                     {% csrf_token %}
-                    <button name="career" value="{{ path.pk }}" type="submit">
-                <div class="col-2">{% if path.career_picture %}<img src="{{ path.career_picture.url }}" width="165" height="165" border="10">{% else %}<img src="{% static 'epsilon/assets/img/index/icon_clock.png' %}" width="165" height="165" border="10">{% endif %}<p class="text-center">{{path.name}}</p></div>
+                    <button style=" background:white;border:0px" name="career" value="{{ path.pk }}" type="submit">
+                <div class="col-2">{% if path.career_picture %}<img src="{{ path.career_picture.url }}" width="165" height="165" border="10">{% else %}<img src="{% static 'epsilon/assets/img/index/default.jpg' %}" width="165" height="165" border="10">{% endif %}<p class="text-center">{{path.name}}</p></div>
                 <!-- <div class="col-2"><a href="#"><img src="{% static 'epsilon/assets/img/path/science.png' %}" width="165" height="165" border="10"><p class="text-center">Science</p></a></div>
                 <div class="col-2"><a href="#"><img src="{% static 'epsilon/assets/img/path/vr.png' %}" width="165" height="165" border="10"><p class="text-center">Virtual Reality</p></a></div>
                 <div class="col-2"><a href="#"><img src="{% static 'epsilon/assets/img/path/dscience.png' %}" width="165" height="165" border="10"><p class="text-center">Data Science</p></a></div> -->
-                {% endfor %}
-                <div class="col-2"></div>
+                
                     </button></form>
+                </div>
+                    {% endfor %}
                 </div>
                 </div>
 
-            <br><br>
-            <div class="text-center"><h3>Courses</h3></div><br><br>
-            <div class="container" style="height:35%">
-                <div class="row">
-                <div class="col-2"></div>
+            <br>
+            <div class="container">
+            <div class="text-center"><h3>Courses</h3></div>
+            <br>
+            <div class="container">
+                <div class="container">
+                    <div class="row">
                 {% for c in courses %}
+                        <div class="col-3">
                 <form action=/epsilon/course method="post" class="ui form" role="form">
                   {% csrf_token %}
-                  <button name="course" value="{{ c.pk }}" type="submit">
-                <div class="col-2">{% if c.course_picture %}<img src="{{ c.course_picture.url }}" width="165" height="165" border="10">{% else %}<img src="{% static 'epsilon/assets/img/index/icon_clock.png' %}" width="165" height="165" border="10">{% endif %}<p class="text-center">{{ c.name }}</p></div>
+                  <button style=" background:white;border:0px" name="course" value="{{ c.pk }}" type="submit">
+                <div class="col-2">{% if c.course_picture %}<img src="{{ c.course_picture.url }}" width="165" height="165" border="10">{% else %}<img src="{% static 'epsilon/assets/img/index/default.jpg' %}" width="165" height="165" border="10">{% endif %}<p class="text-center">{{ c.name }}</p></div>
               </button>
             </form>
+                            </div>
                 {% endfor %}
-                <div class="col-2"></div>
+                        </div>
             </div>
-            </div>
+            </div></div>
 
             <br><br>
 
@@ -147,5 +178,5 @@
             </div>
 
         </div>
-        </body>
+            </div></body>
 </html>
