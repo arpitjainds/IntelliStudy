@@ -44,7 +44,9 @@
         <div class="row">
         <div class="col-lg-8 offset-lg-2">
         <h1 class="display-3" style="color: #2c2828;">{{ content.name }}</h1><hr>
-        <p class="lead"><h3>Quiz (Passing Marks - 8/10)</h3></p>
+        {% if a %}<p class="lead"><h3>Score = {{score}}</h3></p>
+        {% else %}<p class="lead"><h3>Passing Marks (8/10)</h3></p>
+        {% endif %}
         </div>
       </div>
 
@@ -59,14 +61,60 @@
               <div class="row">
 
                       <div class="col-lg-8">
+                        {% if a %}
+                        <form action="/epsilon/study" method="POST">
+                        {% else %}
                         <form action="/epsilon/quiz" method="POST">
+                          {% endif %}
                           {% csrf_token %}
                           {% for q in questions %}
                           {% for o in option %}
                           {% if o.question_id == q %}
                               <fieldset class="form-group">
-                                                  <legend><h4>  {{ q.question }} {% if a %}{% if a.q == "correct" %}<img style="float:right;" src="{% static 'epsilon/assets/img/right.png' %}" width=25px>{% else %} <img style="float:right;" src="{% static 'epsilon/assets/img/cross.png' %}" width=25px> {% endif %}{% endif %} </h4></legend>
+                                                  <legend><h4>  {{ q.question }} {% if a %}{{forloop.counter}}{% if a.forloop.counter == "correct" %}<img style="float:right;" src="{% static 'epsilon/assets/img/right.png' %}" width=25px>{% elif a.forloop.counter == "incorrect" %} <img style="float:right;" src="{% static 'epsilon/assets/img/cross.png' %}" width=25px>{% else %} {% endif %}{% endif %} </h4></legend>
                                                   <input hidden="" type="text" name="{{forloop.counter}}" value="{{q.pk}}">
+                                                  {% if a %}
+                                                  <div class="form-check">
+                                                    <label class="form-check-label">
+                                                      {% if q.answer == o.option_a %}
+                                                      <img style="float:right;" src="{% static 'epsilon/assets/img/right.png' %}" width=18px>
+                                                     {% endif %}
+                                                     {{ o.option_a }}
+                                                    </label>
+                                                  </div><br>
+                                                  <div class="form-check">
+                                                  <label class="form-check-label">
+                                                    {% if q.answer == o.option_b %}
+                                                    <img style="float:right;" src="{% static 'epsilon/assets/img/right.png' %}" width=18px>
+                                                      {% endif %}
+                                                      {{ o.option_b }}
+                                                    </label>
+                                                  </div><br>
+                                                  <div class="form-check">
+                                                  <label class="form-check-label">
+                                                    {% if q.answer == o.option_c %}
+                                                    <img style="float:right;" src="{% static 'epsilon/assets/img/right.png' %}" width=18px>
+                                                      {% endif %}
+                                                      {{ o.option_c }}
+                                                    </label>
+                                                  </div><br>
+                                                  <div class="form-check">
+                                                  <label class="form-check-label">
+                                                    {% if q.answer == o.option_d %}
+                                                    <img style="float:right;" src="{% static 'epsilon/assets/img/right.png' %}" width=18px>
+                                                      {% endif %}
+                                                      {{ o.option_d }}
+                                                    </label>
+                                                  </div><br>
+                                                  <div class="form-check">
+                                                  <label class="form-check-label">
+                                                    {% if q.answer == o.option_e %}
+                                                    <img style="float:right;" src="{% static 'epsilon/assets/img/right.png' %}" width=18px>
+                                                      {% endif %}
+                                                      {{ o.option_e }}
+                                                    </label>
+                                                  </div><br>
+                                                  {% else %}
                                                   <div class="form-check">
                                                     <label class="form-check-label">
                                                       <input type="radio" class="form-check-input" name="{{q.question}}" id="optionsRadios{{forloop.counter}}1" value="{{ o.option_a }}">
@@ -91,6 +139,13 @@
                                                       {{ o.option_d }}
                                                     </label>
                                                   </div><br>
+                                                  <div class="form-check">
+                                                  <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="{{q.question}}" id="optionsRadios{{forloop.counter}}5" value="{{ o.option_d }}">
+                                                      {{ o.option_e }}
+                                                    </label>
+                                                  </div><br>
+                                                  {% endif %}
                                                 </fieldset>
                         <br>
                         {% endif %}
@@ -126,7 +181,7 @@
       <div class="btm_logo"> <div class="region region-footer-logo">
   <div id="block-block-137" class="block block-block" role="contentinfo">
 
-      
+
   <div class="row">
         <div class="container">
 		<a href="https://india.gov.in/" target="_blank" title="india.gov.in"><img alt="india.gov.in" height="51" src="{% static 'epsilon/assets/img/india_gov_logo.png' %}" width="137"></a>
@@ -142,7 +197,7 @@
         <a href="http://103.7.128.243:8085/swachhvidhyalaya/" target="_blank" title="MHRD"><img src="{% static 'epsilon/assets/img/swachh-vidyalay.png' %}" alt="" class="img-responsive"></a>
   </div>
   </div>
-  
+
 </div> <!-- /.block -->
 </div>
  <!-- /.region -->
