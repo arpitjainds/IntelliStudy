@@ -119,8 +119,11 @@ def dashboard(request):
     s= Student.objects.get(unique_id=ExtraInfo.objects.get(user=user))
     courses = Course.objects.all()
     career = Career.objects.all()
-    r = RBM()
-    q = r.RBMx(s)
+    if Enroll.objects.filter(unique_id = s):
+        r = RBM()
+        q = r.RBMx(s)
+    else:
+        q=[]
     context = {'courses': courses, 'career': career, 'recommended':q}
     return render(request, "epsilon/student_dashboard.html", context)
 
