@@ -148,6 +148,7 @@ def course(request):
     user = request.user
     if 'course' in request.POST:
         cid = request.POST.get('course')
+        print(cid)
         course = Course.objects.get(Q(pk=cid))
         enroll = Enroll.objects.filter(Q(unique_id=Student.objects.get(unique_id=ExtraInfo.objects.get(user=user)),
                                          course_id=course))
