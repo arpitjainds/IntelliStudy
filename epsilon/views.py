@@ -359,14 +359,7 @@ def editcourse(request):
 def loggedout(request):
     logout(request)
     return redirect('/epsilon')
-
-
-@login_required
-def reco(request):
-    user = request.user
-    high1, high2, low1, low2 = recommender_related(user)
-    return redirect('/epsilon/reco')
-
+    
 
 @login_required
 def apt(request):
@@ -770,12 +763,12 @@ class RBM:
                 if h[i]> max3 and h[i]!= max1 and h[i]!=max2:
                     max3 = h[i]
                     pos3 = i
-        
+
         print (hidden_probs)
         print(pos1)
         print(pos2)
-        print(pos3)        
-        
+        print(pos3)
+
         for h in hidden_states:
             for i in range(len(h)-1):
                 if i==pos1 or i==pos2 or i==pos3:
@@ -783,7 +776,7 @@ class RBM:
                 else:
                     h[i+1]=0
         print(hidden_states)
-        
+
         # Turn the hidden units on with their specified probabilities.
         # hidden_states[:,:] = hidden_probs > np.random.rand(num_examples, self.num_hidden + 1)
         # Always fix the bias unit to 1.
@@ -878,29 +871,14 @@ class RBM:
         return 1.0 / (1 + np.exp(-x))
 
 
-# starts from here
 def recommender_related(rec_for):
-    st = Student.objects.all()  # TODO: Change this to total number of students in the db
-    count = 0
-    for s in st:
-        count = count + 1
-    users = count
+    users = 27  # TODO: Change this to total number of students in the db
     items = 19  # TODO: Change this to total number of courses in the db
-    recommend_data1 = open("/Users/gautam/Desktop/IntelliStudy/grades.csv","w") # TODO: Change this address get grades from scores and store into a csv and avg based on courses
-    courses = Course.objects.all()
-    students = Student.objects.all()
-    for c in courses:
-        for student in students:
-            sc = Score.objects.filter(Q(unique_id=student, content_id=Content.objects.filter(Q(course_id=c)))).aggregate(Avg('marks')).values()
-            for s in sc:
-                if s:
-                    if s != -1:
-                        recommend_data1.write(str(student.unique_id.pk) + "," + str(c.pk) + "," + str(int(s)) + "\n")
-    recommend_data1.close()
-    recommend_data = readingFile("/Users/gautam/Desktop/IntelliStudy/grades.csv")
+    recommend_data = readingFile("C:\\Users\\arsha\\Documents\\GitHub\\IntelliStudy\\epsilon\\grades.csv") # TODO: Change this address get grades from scores and store into a csv and avg based on courses
     high1, high2, low1, low2 = predictRating(recommend_data, users, items, rec_for)
-    return high1, high2, low1, low2
-
+    # highs are easiest for him to score high
+    # lows will be hard for him to score high
+    return HttpResponse("Done Recommendation\n High:" + str(high1) + " " + str(high2) + "\n LOW: " + str(low1) + " " + str(low2))
 
 def readingFile(filename):
     f = open(filename,"r")
@@ -911,19 +889,19 @@ def readingFile(filename):
         data.append(e)
     return data
 
-
 def predictRating(recommend_data, users, items, rec_for):
+
     M, sim_user = crossValidation(recommend_data, users, items)
     pred_low1 = 10
     pred_low2 = 10
     pred_high1 = 0
     pred_high2 = 0
-    f = open("/Users/gautam/Desktop/IntelliStudy/toBeGraded.csv","r")  # TODO: Change this address to the courses not enrolled
+    f = open("C:\\Users\\arsha\\Documents\\GitHub\\IntelliStudy\\epsilon\\toBeGraded.csv","r")  # TODO: Change this address to the courses not enrolled
     #f = open(sys.argv[2],"r")
-    items = Enroll.objects.filter(Q(unique_id_id=user))
     toBeRated = {"user":[], "item":[]}
-    for i in items:
-        toBeRated["item"].append(int(i.pk))
+    for row in f:
+        r = row.split(',')
+        toBeRated["item"].append(int(r[1]))
         toBeRated["user"].append(rec_for)
 
     f.close()
@@ -931,7 +909,7 @@ def predictRating(recommend_data, users, items, rec_for):
     pred_rate = []
 
     #fw = open('result1.csv','w')
-    fw_w = open('/Users/gautam/Desktop/IntelliStudy/result1.csv','w')  # TODO: Change this to return the results
+    fw_w = open('C:\\Users\\arsha\\Documents\\GitHub\\IntelliStudy\\epsilon\\result1.csv','w')  # TODO: Change this to return the results
 
     l = len(toBeRated["user"])
     for e in range(l):
