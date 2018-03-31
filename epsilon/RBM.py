@@ -1,4 +1,5 @@
 from __future__ import print_function
+from .models import Course,Enroll,Student,Has
 import numpy as np
 import xlrd
 import os

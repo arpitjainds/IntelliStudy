@@ -93,10 +93,11 @@
             </div>
             </div>
             </div>
+            
+            <br>
+            <div class="row"><div class="col-lg-8" style="border-right:0.5px solid #d3d3d3">
+            <br>
 
-            <div class="container"><p><br><br></p></div>
-
-            <div class="row"><div class="col-lg-8" style="border-right:0.5px solid;">
             <div class="text-center"><h3>Career Path</h3></div><br>
             <div class="container">
                 <div class="row">
@@ -139,6 +140,33 @@
 
           </div>
               <div class="col-lg-4">
+
+                    <center><h3>Recommended Career Paths</h3></center><br><br>
+
+                <div class="list-group" style="padding-left:20px; padding-right:20px">
+                    {% for q in recommended %}
+                    <form action=/epsilon/career method="post" class="ui form" role="form">
+                        {% csrf_token %}
+                    <button name="career" value="{{q.pk }}" type="submit" class="list-group-item list-group-item-action flex-column align-items-start">
+                      <div class="d-flex w-100 justify-content-between">
+                            <div class="row"><div class="col-lg-3">
+                            <p class="mb-1">
+                                {% if q.career_picture %}
+                                <img src="{{ q.career_picture.url }}" width="40" height="40" border="0">
+                                {% else %}
+                                <img src="{% static 'epsilon/assets/img/index/default.jpg' %}" width="40" height="40" border="0">
+                                {% endif %}
+                            </p></div><div class="col-lg-9">
+                            <p class="text-center">{{q.name}}</p>
+                        </div>
+                        </div>
+                      </div>
+                      
+                    </button>
+                </form>
+                    {% endfor %}
+                  </div>
+
 
                 <center><h3>Recommended Courses</h3></center><br><br>
                 <center><span class="badge badge-info">You Might find These Easy.</span></center><br>

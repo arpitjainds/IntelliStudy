@@ -57,11 +57,11 @@
         <div class="row">
           <div class="col-lg-5">
 
-            
+
             {% for c in courses %}
             <form action=/epsilon/editcourse method="post" class="ui form" role="form">
             {% csrf_token %}
-                <button name="course" value="{{c.id}}" type="submit">
+                <button style="background:white; border:0px" name="course" value="{{c.id}}" type="submit">
                   <div class="card bg-white text-white">
                     <img class="card-img" src="{% static 'epsilon/assets/img/Card.jpg' %}" alt="Card image">
                     <div class="card-img-overlay">
@@ -87,7 +87,7 @@
       <div class="btm_logo"> <div class="region region-footer-logo">
   <div id="block-block-137" class="block block-block" role="contentinfo">
 
-      
+
   <div class="row">
         <div class="container">
 		<a href="https://india.gov.in/" target="_blank" title="india.gov.in"><img alt="india.gov.in" height="51" src="{% static 'epsilon/assets/img/india_gov_logo.png' %}" width="137"></a>
@@ -103,7 +103,7 @@
         <a href="http://103.7.128.243:8085/swachhvidhyalaya/" target="_blank" title="MHRD"><img src="{% static 'epsilon/assets/img/swachh-vidyalay.png' %}" alt="" class="img-responsive"></a>
   </div>
   </div>
-  
+
 </div> <!-- /.block -->
 </div>
  <!-- /.region -->
