@@ -108,7 +108,7 @@
                 <p class="mb-1">How do you think this course is?</p>
               </a>
               {% else %}
-              <form action=/epsilon/course method="post" class="ui form" role="form">
+              <form action=/epsilon/apt method="post" class="ui form" role="form">
                 {% csrf_token %}
               <button name="join" value="{{ course.pk }}" class="list-group-item list-group-item-action flex-column align-items-start active">
                 <div class="d-flex w-100 justify-content-between">

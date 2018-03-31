@@ -1,0 +1,178 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="{% static 'epsilon/assets/img/favicons/logo.png' %}">
+
+    <title>{{ course.name }} - Quiz</title>
+
+    <!-- Bootstrap core CSS -->
+    <script src="{% static 'epsilon/assets/js/jquery-3.2.1.slim.min.js' %}"></script>
+    <script src="{% static 'epsilon/assets/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'epsilon/assets/js/popper.min.js' %}"></script>
+    <script src="{% static 'epsilon/assets/js/jquery-3.2.1.slim.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'epsilon/assets/css/bootstrap.css' %}">
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+    <a class="navbar-brand" href="/epsilon"><img src="{% static 'epsilon/assets/img/index/mainname.png' %}" height=45px /></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor03">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/epsilon/mycourses">My Courses <span class="sr-only" style="color:#3d3d3d">(current)</span></a>
+            </li>
+        </ul>
+        <ul class="nav justify-content-end">
+            <li class="nav-item">
+                <a class="nav-link" href="/epsilon/profile">Profile</a>
+            </li>
+        </ul>
+    </div>
+    </div>
+  </nav>
+
+{% if question %}
+      <div class="row">
+        <div class="col-lg-8 offset-lg-2" style="background:white">
+
+              <div class="row"><p><br><br></p></div>
+
+              <div class="row">
+
+                      <div class="col-lg-8">
+                        <form action="/epsilon/apt" method="POST">
+                          {% csrf_token %}
+                          {% for q in question %}
+                          {% for o in option %}
+                              <fieldset class="form-group">
+                                                  <legend><h4>  {{ q.question }} </h4></legend>
+                                                  <input hidden="" type="text" name="ques" value="{{q.pk}}">
+                                                  <div class="form-check">
+                                                    <label class="form-check-label">
+                                                      <input type="radio" class="form-check-input" name="{{q.question}}" id="optionsRadios1" value="{{ o.option_a }}">
+                                                     {{ o.option_a }}
+                                                    </label>
+                                                  </div><br>
+                                                  <div class="form-check">
+                                                  <label class="form-check-label">
+                                                      <input type="radio" class="form-check-input" name="{{q.question}}" id="optionsRadios2" value="{{ o.option_b }}">
+                                                      {{ o.option_b }}
+                                                    </label>
+                                                  </div><br>
+                                                  <div class="form-check">
+                                                  <label class="form-check-label">
+                                                      <input type="radio" class="form-check-input" name="{{q.question}}" id="optionsRadios3" value="{{ o.option_c }}">
+                                                      {{ o.option_c }}
+                                                    </label>
+                                                  </div><br>
+                                                  <div class="form-check">
+                                                  <label class="form-check-label">
+                                                      <input type="radio" class="form-check-input" name="{{q.question}}" id="optionsRadios4" value="{{ o.option_d }}">
+                                                      {{ o.option_d }}
+                                                    </label>
+                                                  </div><br>
+                                                  <div class="form-check">
+                                                  <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="{{q.question}}" id="optionsRadios5" value="{{ o.option_d }}">
+                                                      {{ o.option_e }}
+                                                    </label>
+                                                  </div><br>
+                                                </fieldset>
+                                                {% endfor %}
+                                                {% endfor %}
+                        <br>
+                        <div class="row"><div class="offset-lg-7 col-lg-2"><center><button type="submit" name="next" value="{{ course.pk }}" class="btn btn-primary">Next</button></center></div></div>
+                        </form><br>
+                      </div>
+
+              </div>
+
+
+        </div>
+      </div>
+      {% else %}
+      <form action="/epsilon/course" method="POST">
+        {% csrf_token %}
+      <div class="jumbotron" style="color: #2c2828;background: #d0e8f0">
+        <div class="row">
+        <div class="col-lg-7 offset-lg-1">
+        <h1 class="display-3" style="color: #2c2828;">Score = {{ score }}</h1>
+        <hr class="my-4">
+        <p>Your current level for this course is {{level}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="row"><div class="offset-lg-5 col-lg-2"><center><button type="submit" name="join" value="{{ course.pk }}" class="btn btn-primary">Go Back</button></center></div></div>
+    </form>
+      {% endif %}
+      </div>
+<div class="row"><p><br></p></div>
+
+<div class="btm_logoWrap">
+<div class="container">
+<div class="btm_logo"> <div class="region region-footer-logo">
+<div id="block-block-137" class="block block-block" role="contentinfo">
+
+
+<div class="row">
+<div class="container">
+<a href="https://india.gov.in/" target="_blank" title="india.gov.in"><img alt="india.gov.in" height="51" src="{% static 'epsilon/assets/img/india_gov_logo.png' %}" width="137"></a>
+<a href="http://mygov.in/" target="_blank" title="MyGov.in"><img alt="MyGov.in" height="51" src="{% static 'epsilon/assets/img/my_gov_logo.png' %}" width="61"></a>
+<a href="http://evisitors.nic.in/public/Home.aspx" target="_blank" title="MyVisit"><img alt="MyVisit" height="51" src="{% static 'epsilon/assets/img/my_visit.png' %}" width="98"></a>
+<a href="http://digitalindia.gov.in/" target="_blank" title="Digital India"><img alt="Digital India" height="51" src="{% static 'epsilon/assets/img/digital_india.png' %}" width="78"></a>
+<a href="rti_he" title="Right to Information"><img alt="Right to Information" height="51" src="{% static 'epsilon/assets/img/rti_logo.png' %}" width="78"></a>
+<a href="https://data.gov.in/" target="_blank" title="data.gov.in"><img alt="data.gov.in" height="51" src="{% static 'epsilon/assets/img/datagov_logo.png' %}" width="110"></a>
+<a href="http://www.nvsp.in/" target="_blank" title="Online Services for Voters"><img alt="Online Services for Voters" height="51" src="{% static 'epsilon/assets/img/onlineservice_logo.png' %}" width="113"></a>
+<a href="http://dial.gov.in/" target="_blank" title="Dial.gov"><img alt="Dial.gov" height="51" src="{% static 'epsilon/assets/img/dialgov-logo.png' %}" width="64"></a>
+<a href="http://ssashagun.nic.in/" target="_blank" title="ssa.gov"><img alt="ssa" height="51" src="{% static 'epsilon/assets/img/ssa_schm.jpg' %}" width="112"></a>
+<a href="http://mdm.nic.in/" target="_blank" title="Mid Day Meal"><img alt="Mid Day Meal" height="51" src="{% static 'epsilon/assets/img/mdm_schm.jpg' %}" width="112"></a>
+<a href="http://103.7.128.243:8085/swachhvidhyalaya/" target="_blank" title="MHRD"><img src="{% static 'epsilon/assets/img/swachh-vidyalay.png' %}" alt="" class="img-responsive"></a>
+</div>
+</div>
+
+</div> <!-- /.block -->
+</div>
+<!-- /.region -->
+</div>
+</div>
+</div>
+<div class="container">
+<div class="row">
+<div class="col-lg-12"><hr style=" border: 0.5px solid #3d3d3d;">
+<ul class="list-unstyled">
+  <li class="float-lg-right"><a href="#top">Back to top</a></li>
+  <li><a href="/epsilon/about">About</a></li>
+  <li><a href="https://github.com/gautamyadavs/IntelliStudy">Source | GitHub</a></li>
+</ul>
+<center><p>Made with <img src="{% static 'epsilon/assets/img/index/heart.png' %}" width=18px /> by <a href="/epsilon/about">Team Epsilon</a>.</p></center>
+</div>
+</div>
+
+</div>
+
+
+        <script type="text/javascript">
+        $(document).ready(function() {
+  var start = new Date();
+
+  $(window).unload(function() {
+      var end = new Date();
+      $.ajax({
+        url: "log.php",
+        data: {'timeSpent': end - start},
+        async: false
+      })
+   });
+});
+</script>
+  </body>
+</html>

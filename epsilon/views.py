@@ -1,4 +1,8 @@
 import random
+import numpy as np
+import datetime
+import pytz
+from dateutil import parser
 
 
 from django.shortcuts import render, redirect
@@ -142,7 +146,7 @@ def course(request):
         enroll = Enroll.objects.filter(Q(unique_id=Student.objects.get(unique_id=ExtraInfo.objects.get(user=user)),
                                          course_id=course))
         content = Content.objects.filter(Q(course_id=course))
-        contain = Contain.objects.filter(Q(group_id=Group.objects.get(course_id=course),
+        contain = Contain.objects.filter(Q(group_id=Group.objects.filter(Q(course_id=course)),
                                            unique_id=Student.objects.get(unique_id=ExtraInfo.objects.get(user=user))))
         if contain.exists():
             contain.delete()
@@ -250,23 +254,16 @@ def update_profile(request):
     extrainfo = ExtraInfo.objects.get(user=user)
     job = request.POST.get("job_opt")
     qualification = request.POST.get("qualify_opt")
-    
+
     password = request.POST.get("password")
-    print(password)
     extrainfo.job = job
     extrainfo.qualification = qualification
     extrainfo.profile_picture = request.POST.get("profile_pic")
-    print(extrainfo)
     extrainfo.save()
 
     if password is not "":
         user.set_password(password)
         user.save()
-
-    # if 'change_pic' in request.POST:
-    #     pic = request.POST.get("profile_pic")
-    #     extrainfo.profile_picture = pic
-    #     extrainfo.save()
 
     context = {'extrainfo': extrainfo, 'user':user}
 
@@ -353,7 +350,7 @@ def edittopic(request):
     content = Content.objects.get(id = request.POST['content'])
     form = AddSubtopic()
     context = {'content': content,
-                'form' : form}    
+                'form' : form}
     if request.method == 'POST' and request.FILES:
         fileForm = AddSubtopic(initial={'content_id':content,
                                         'mentor_id':mentor})
@@ -385,3 +382,243 @@ def loggedout(request):
     logout(request)
     return redirect('/epsilon')
 
+
+@login_required
+def apt(request):
+    if 'join' in request.POST:
+        cid = request.POST.get('join')
+        request.session['count'] = 0
+        request.session['score'] = 0
+        now = datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
+        request.session['time'] = str(now)
+        diff = []
+        request.session['diff'] = diff
+        course = Course.objects.get(pk=cid)
+        user=request.user
+        unique_id=Student.objects.get(unique_id=ExtraInfo.objects.get(user=user))
+        quiz = Question.objects.filter(Q(content_id=Content.objects.filter(Q(course_id=course)), level="intermediate"))
+        question = random.sample(list(quiz), 1)
+        for q in question:
+            print(q.avg_time)
+            request.session['avg'] = q.avg_time
+            option = Option.objects.filter(Q(question_id=q))
+        context = {'course': course, 'question': question, 'option': option}
+        return render(request, "epsilon/aptquiz.html", context)
+    if 'next' in request.POST:
+        x = request.session['count']
+        if x < 9:
+            cid = request.POST['next']
+            request.session['count'] = request.session['count'] + 1
+            print(request.session['count'])
+            course = Course.objects.get(pk=cid)
+            qp = request.POST.get('ques')
+            que = Question.objects.get(pk=qp)
+            o = request.POST.get(que.question)
+            if o:
+                if o == que.answer:
+                    a = 1
+                    request.session['score'] = request.session['score'] + 1
+                else:
+                    a = 0
+            else:
+                a = 0
+            now = request.session['time']
+            now = parser.parse(now)
+            timediff = datetime.datetime.utcnow().replace(tzinfo=pytz.utc) - now
+            x = timediff.total_seconds()
+            now = datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
+            avg = request.session['avg']
+            diff = request.session['diff']
+            if a==0:
+                diff.append(-1)
+            else:
+                v = (avg-x)/avg
+                if v > 1.3:
+                    v = 1.3
+                elif v < -1.3:
+                    v = -1.3
+                diff.append(float(v))
+            print(diff)
+            output = quiz_reccomend1(diff, request.session['count'])
+            request.session['diff'] = diff
+            request.session['time'] = str(now)
+            if output == 0:
+                level="beginner"
+            elif output == 1:
+                level="intermediate"
+            elif output == 2:
+                level="advanced"
+            else:
+                print("ERRORR!!!")
+            print(level)
+            quiz = Question.objects.filter(Q(content_id=Content.objects.filter(Q(course_id=course)), level=level))
+            question = random.sample(list(quiz), 1)
+            for q in question:
+                request.session['avg'] = q.avg_time
+                option = Option.objects.filter(Q(question_id=q))
+            context = {'course': course, 'question': question, 'option': option}
+            return render(request, "epsilon/aptquiz.html", context)
+        else:
+            cid = request.POST['next']
+            request.session['count'] = request.session['count'] + 1
+            course = Course.objects.get(pk=cid)
+            qp = request.POST.get('ques')
+            que = Question.objects.get(pk=qp)
+            o = request.POST.get(que.question)
+            if o:
+                if o == que.answer:
+                    a = 1
+                    request.session['score'] = request.session['score'] + 1
+                else:
+                    a = 0
+            else:
+                a = 0
+            now = request.session['time']
+            now = parser.parse(now)
+            timediff = datetime.datetime.utcnow().replace(tzinfo=pytz.utc) - now
+            x = timediff.total_seconds()
+            now = datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
+            avg = request.session['avg']
+            diff = request.session['diff']
+            if a==0:
+                diff.append(-1)
+            else:
+                v = (avg-x)/avg
+                if v > 1.3:
+                    v = 1.3
+                elif v < -1.3:
+                    v = -1.3
+                diff.append(float(v))
+            output = quiz_reccomend1(diff, request.session['count'])
+            request.session['diff'] = diff
+            if output == 0:
+                level="beginner"
+            elif output == 1:
+                level="intermediate"
+            elif output == 2:
+                level="advanced"
+            else:
+                print("ERRORR!!!")
+            score = request.session['score']
+            context = {'course': course, 'score': score, 'level': level}
+            return render(request, "epsilon/aptquiz.html", context)
+
+
+
+# Sigmoid Function
+def sigmoid (x):
+    return 1/(1 + np.exp(-x))
+
+#Derivative of Sigmoid Function
+def derivatives_sigmoid(x):
+    return x * (1 - x)
+
+
+def quiz_reccomend1(x, t):
+    # Input
+    if (t == 1):
+        X = np.array([[0.9], [1.2], [0.8], [0.2], [0.15], [-0.20], [-0.6], [-0.8], [-0.9]])
+    elif (t == 2):
+        X = np.array(
+            [[0.9, 0.6], [1.2, 0.4], [0.8, 0.9], [0.2, -0.2], [0.15, 0.3], [-0.20, 0.4], [-0.6, -0.4], [-0.8, -0.3],
+             [-0.9, -0.2]])
+    elif (t == 3):
+        X = np.array(
+            [[0.9, 0.6, 0.7], [1.2, 0.4, 0.6], [0.8, 0.9, 0.6], [0.2, -0.2, 0.1], [0.15, 0.3, 0.1], [-0.20, 0.4, -0.1],
+             [-0.6, -0.4, -0.3], [-0.8, -0.3, -0.4], [-0.9, -0.2, -0.3]])
+    elif (t == 4):
+        X = np.array([[0.9, 0.6, 0.7, 0.8], [1.2, 0.4, 0.6, 1.3], [0.8, 0.9, 0.6, 0.7], [0.2, -0.2, 0.1, -0.2],
+                      [0.15, 0.3, 0.1, -0.2], [-0.20, 0.4, -0.1, 0.1], [-0.6, -0.4, -0.3, -0.4],
+                      [-0.8, -0.3, -0.4, -0.5], [-0.9, -0.2, -0.3, -0.4]])
+    elif (t == 5):
+        X = np.array([[0.9, 0.6, 0.7, 0.8, 0.5], [1.2, 0.4, 0.6, 1.3, 0.5], [0.8, 0.9, 0.6, 0.7, 0.9],
+                      [0.2, -0.2, 0.1, -0.2, 0.1],
+                      [0.15, 0.3, 0.1, -0.2, -0.1], [-0.20, 0.4, -0.1, 0.1, -0.2], [-0.6, -0.4, -0.3, -0.4, -0.4],
+                      [-0.8, -0.3, -0.4, -0.5, -1.0], [-0.9, -0.2, -0.3, -0.4, -0.7]])
+    elif (t == 6):
+        X = np.array([[0.9, 0.6, 0.7, 0.8, 0.5, 0.7], [1.2, 0.4, 0.6, 1.3, 0.5, 0.8], [0.8, 0.9, 0.6, 0.7, 0.9, 0.7],
+                      [0.2, -0.2, 0.1, -0.2, 0.1, 0.3],
+                      [0.15, 0.3, 0.1, -0.2, -0.1, 0.2], [-0.20, 0.4, -0.1, 0.1, -0.2, 0.3],
+                      [-0.6, -0.4, -0.3, -0.4, -0.4, -0.3],
+                      [-0.8, -0.3, -0.4, -0.5, -1.0, 0.2], [-0.9, -0.2, -0.3, -0.4, -0.7, 0.1]])
+    elif (t == 7):
+        X = np.array([[0.9, 0.6, 0.7, 0.8, 0.5, 0.7, 0.9], [1.2, 0.4, 0.6, 1.3, 0.5, 0.8, 0.6],
+                      [0.8, 0.9, 0.6, 0.7, 0.9, 0.7, 1.2],
+                      [0.2, -0.2, 0.1, -0.2, 0.1, 0.3, 0.2], [0.15, 0.3, 0.1, -0.2, -0.1, 0.2, 0.2],
+                      [-0.20, 0.4, -0.1, 0.1, -0.2, 0.3, -0.1],
+                      [-0.6, -0.4, -0.3, -0.4, -0.4, -0.3, -0.8], [-0.8, -0.3, -0.4, -0.5, -1.0, 0.2, -0.8],
+                      [-0.9, -0.2, -0.3, -0.4, -0.7, -0.3, -0.8]])
+    elif (t == 8):
+        X = np.array([[0.9, 0.6, 0.7, 0.8, 0.5, 0.7, 0.9, 0.6], [1.2, 0.4, 0.6, 1.3, 0.5, 0.8, 0.6, 0.9],
+                      [0.8, 0.9, 0.6, 0.7, 0.9, 0.7, 1.2, 0.9],
+                      [0.2, -0.2, 0.1, -0.2, 0.1, 0.3, 0.2, -0.1], [0.15, 0.3, 0.1, -0.2, -0.1, 0.2, 0.2, -0.2],
+                      [-0.20, 0.4, -0.1, 0.1, -0.2, 0.3, -0.1, 0.2],
+                      [-0.6, -0.4, -0.3, -0.4, -0.4, -0.3, -0.8, 0.2], [-0.8, -0.3, -0.4, -0.5, -1.0, 0.2, -0.8, -0.5],
+                      [-0.9, -0.2, -0.3, -0.4, -0.7, -0.3, -0.8, -0.4]])
+    elif (t == 9):
+        X = np.array([[0.9, 0.6, 0.7, 0.8, 0.5, 0.7, 0.9, 0.6, 0.9], [1.2, 0.4, 0.6, 1.3, 0.5, 0.8, 0.6, 0.9, 0.8],
+                      [0.8, 0.9, 0.6, 0.7, 0.9, 0.7, 1.2, 0.9, 1.0],
+                      [0.2, -0.2, 0.1, -0.2, 0.1, 0.3, 0.2, -0.1, 0.3],
+                      [0.15, 0.3, 0.1, -0.2, -0.1, 0.2, 0.2, -0.2, -0.2],
+                      [-0.20, 0.4, -0.1, 0.1, -0.2, 0.3, -0.1, 0.2, -0.2],
+                      [-0.6, -0.4, -0.3, -0.4, -0.4, -0.3, -0.8, 0.2, -0.6],
+                      [-0.8, -0.3, -0.4, -0.5, -1.0, 0.2, -0.8, -0.5, -0.7],
+                      [-0.9, -0.2, -0.3, -0.4, -0.7, -0.3, -0.8, -0.4, 0.4]])
+    elif (t == 10):
+        X = np.array(
+            [[0.9, 0.6, 0.7, 0.8, 0.5, 0.7, 0.9, 0.6, 0.9, -0.4], [1.2, 0.4, 0.6, 1.3, 0.5, 0.8, 0.6, 0.9, 0.8, 0.6],
+             [0.8, 0.9, 0.6, 0.7, 0.9, 0.7, 1.2, 0.9, 1.0, -0.6],
+             [0.2, -0.2, 0.1, -0.2, 0.1, 0.3, 0.2, -0.1, 0.3, -.4],
+             [0.15, 0.3, 0.1, -0.2, -0.1, 0.2, 0.2, -0.2, -0.2, 0.3],
+             [-0.20, 0.4, -0.1, 0.1, -0.2, 0.3, -0.1, 0.2, -0.2, 0],
+             [-0.6, -0.4, -0.3, -0.4, -0.4, -0.3, -0.8, 0.2, -0.6, 0.4],
+             [-0.8, -0.3, -0.4, -0.5, -1.0, 0.2, -0.8, -0.5, -0.7, -0.4],
+             [-0.9, -0.2, -0.3, -0.4, -0.7, -0.3, -0.8, -0.4, 0.4, -0.8]])
+    # Output
+    y = np.array([[1, 0, 0], [1, 0, 0], [1, 0, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 0, 1], [0, 0, 1], [0, 0, 1]])
+
+    # Variable initialization
+    epoch = 5000  # Setting training iterations
+    lr = 0.1  # Setting learning rate
+    inputlayer_neurons = X.shape[1]  # number of features in data set
+    hiddenlayer_neurons = 10  # number of hidden layers neurons
+    output_neurons = 3  # number of neurons at output layer
+    # weight and bias initialization
+    wh1 = np.random.uniform(size=(inputlayer_neurons, hiddenlayer_neurons))
+    bh1 = np.random.uniform(size=(1, hiddenlayer_neurons))
+    wout1 = np.random.uniform(size=(hiddenlayer_neurons, output_neurons))
+    bout1 = np.random.uniform(size=(1, output_neurons))
+    for i in range(epoch):
+        # Forward Propogation
+        hidden_layer_input1 = np.dot(X, wh1)
+        hidden_layer_input = hidden_layer_input1 + bh1
+        hiddenlayer_activations = sigmoid(hidden_layer_input)
+        output_layer_input1 = np.dot(hiddenlayer_activations, wout1)
+        output_layer_input = output_layer_input1 + bout1
+        output = sigmoid(output_layer_input)
+
+        # Backpropagation
+        E = y - output
+        slope_output_layer = derivatives_sigmoid(output)
+        slope_hidden_layer = derivatives_sigmoid(hiddenlayer_activations)
+        d_output = E * slope_output_layer
+        Error_at_hidden_layer = d_output.dot(wout1.T)
+        d_hiddenlayer = Error_at_hidden_layer * slope_hidden_layer
+        wout1 += hiddenlayer_activations.T.dot(d_output) * lr
+        bout1 += np.sum(d_output, axis=0, keepdims=True) * lr
+        wh1 += X.T.dot(d_hiddenlayer) * lr
+        bh1 += np.sum(d_hiddenlayer, axis=0, keepdims=True) * lr
+
+    hidden_layer_input1 = np.dot(x, wh1)
+    hidden_layer_input = hidden_layer_input1 + bh1
+    hiddenlayer_activations = sigmoid(hidden_layer_input)
+    output_layer_input1 = np.dot(hiddenlayer_activations, wout1)
+    output_layer_input = output_layer_input1 + bout1
+    output = sigmoid(output_layer_input)
+    print(output)
+    if ((output[0][0] > output[0][1]) and (output[0][0] > output[0][2])):
+        return 2
+    elif (output[0][1] > output[0][2]):
+        return 1
+    else:
+        return 0

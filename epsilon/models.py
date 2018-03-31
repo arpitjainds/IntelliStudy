@@ -109,9 +109,11 @@ class Question(models.Model):
     level = models.CharField(max_length=20, choices=Constants.LEVEL, default='intermediate')
     question = models.TextField(max_length=4000, null=True, blank=True)
     answer = models.CharField(max_length=100, null=True, blank=True)
+    avg_time = models.IntegerField(default=0)
+    users = models.IntegerField(default = 0)
 
     def __str__(self):
-        return '{} - {}'.format(self.content_id.course_id.id, self.content_id)
+        return '{} - {} - {}'.format(self.content_id.course_id.id, self.content_id, self.level)
 
 
 class Option(models.Model):
@@ -125,7 +127,7 @@ class Option(models.Model):
 class Has(models.Model):
     career_id = models.ForeignKey(Career, on_delete=models.CASCADE)
     course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
-    level = models.CharField(max_length=20, choices=Constants.LEVEL, default='intermediate')
+    level = models.CharField(max_length=20, choices=Constants.LEVEL, default='beginner')
     order = models.IntegerField(default=1)
 
 
@@ -133,6 +135,7 @@ class Enroll(models.Model):
     unique_id = models.ForeignKey(Student, on_delete=models.CASCADE)
     course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
     feedback = models.TextField(default='', max_length=1000, blank=True, null=True)
+    level = models.CharField(max_length=20, choices=Constants.LEVEL, default='beginner')
 
 
 class Score(models.Model):
