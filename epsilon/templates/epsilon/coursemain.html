@@ -80,27 +80,7 @@
                  <p class="mb-1">Leave this course.</p>
                </button>
              </form>
-             {% if contain %}
-             <form action=/epsilon/group method="post" class="ui form" role="form">
-               {% csrf_token %}
-              <button name="group" value="{{ course.pk }}" class="list-group-item list-group-item-action flex-column align-items-start">
-                <div class="d-flex w-100 justify-content-between">
-                  <h5 class="mb-1">Goto Group</h5>
-                </div>
-                <p class="mb-1">See what your friends are doing.</p>
-              </button>
-            </form>
-            {% else %}
-            <form action=/epsilon/group method="post" class="ui form" role="form">
-              {% csrf_token %}
-             <button name="join" value="{{ course.pk }}" class="list-group-item list-group-item-action flex-column align-items-start">
-               <div class="d-flex w-100 justify-content-between">
-                 <h5 class="mb-1">Join Group</h5>
-               </div>
-               <p class="mb-1">See what your friends are doing.</p>
-             </button>
-           </form>
-           {% endif %}
+             
               <a href="#feedback" class="list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
                   <h5 class="mb-1">Give Feedback</h5>

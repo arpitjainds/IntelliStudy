@@ -148,16 +148,6 @@ class Score(models.Model):
         return '{} - {}'.format(self.unique_id, self.content_id)
 
 
-class Group(models.Model):
-    course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
-    level = models.CharField(max_length=20, choices=Constants.LEVEL, default='intermediate')
-
-
-class Contain(models.Model):
-    group_id = models.ForeignKey(Group, on_delete=models.CASCADE)
-    unique_id = models.ForeignKey(Student, on_delete=models.CASCADE)
-
-
 class Manage(models.Model):
     course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
     mentor_id = models.ForeignKey(Mentor, on_delete=models.CASCADE)
@@ -165,7 +155,6 @@ class Manage(models.Model):
 
 class Message(models.Model):
     message = models.TextField(default='', max_length=8000, blank=True, null=True)
-    group_id = models.ForeignKey(Group, on_delete=models.CASCADE)
     unique_id = models.ForeignKey(Student, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now=True)
 

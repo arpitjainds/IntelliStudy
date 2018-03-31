@@ -24,7 +24,7 @@ from django.template.context import RequestContext
 from django.contrib.auth.models import User
 from django.db.models import Q, Count, Avg
 from .models import (Course, Enroll, Student, Mentor, Question, ExtraInfo, Content, Manage, Score,
-                     File, Option, Contain, Group, Career, Has)
+                     File, Option, Career, Has)
 from .forms import AddSubtopic
 import numpy as np
 import xlrd
@@ -165,10 +165,7 @@ def course(request):
         enroll = Enroll.objects.filter(Q(unique_id=Student.objects.get(unique_id=ExtraInfo.objects.get(user=user)),
                                          course_id=course))
         content = Content.objects.filter(Q(course_id=course))
-        contain = Contain.objects.filter(Q(group_id=Group.objects.filter(Q(course_id=course)),
-                                           unique_id=Student.objects.get(unique_id=ExtraInfo.objects.get(user=user))))
-        if contain.exists():
-            contain.delete()
+        
         for c in content:
             score = Score.objects.filter(Q(content_id = c, unique_id=Student.objects.get(unique_id=ExtraInfo.objects.get(user=user))))
             score.delete()
@@ -194,13 +191,8 @@ def course(request):
     else:
         progress = 0
     mentor = Mentor.objects.filter(Q(pk__in=Manage.objects.filter(Q(course_id=course)).values('mentor_id_id')))
-    group = Group.objects.filter(Q(course_id=course))
-    if group:
-        contain = Contain.objects.filter(Q(group_id=Group.objects.get(course_id=course),
-                                           unique_id=Student.objects.get(unique_id=ExtraInfo.objects.get(user=user))))
-    else:
-        contain = []
-    context = {'course': course, 'content': content, 'mentor': mentor, 'enroll': enroll, 'score': score, 'progress': progress, 'contain': contain}
+    
+    context = {'course': course, 'content': content, 'mentor': mentor, 'enroll': enroll, 'score': score, 'progress': progress,}
     return render(request, "epsilon/coursemain.html", context)
 
 
@@ -299,40 +291,6 @@ def study(request):
     quiz = Question.objects.filter(Q(content_id=content, level=unique_id.level))
     context = {'content': content, 'file': file}
     return render(request, "epsilon/coursestudy.html", context)
-
-
-@login_required
-def group(request):
-    user = request.user
-    if 'group' in request.POST:
-        cid = request.POST.get('group')
-        course = Course.objects.get(pk=cid)
-        contain = Contain.objects.get(group_id__in=Group.objects.filter(Q(course_id=course)),
-                                      unique_id=Student.objects.get(unique_id=ExtraInfo.objects.get(user=user)))
-        students = Student.objects.filter(Q(unique_id__in=Contain.objects.filter(Q(group_id=Group.objects.filter(Q(course_id=course)))).values('unique_id_id')))
-        context = {'course': course, 'students': students}
-        return render(request, "epsilon/coursegroup.html", context)
-    if 'join' in request.POST:
-        cid = request.POST.get('join')
-        course = Course.objects.get(pk=cid)
-        flag = 0
-        student = Student.objects.get(unique_id=ExtraInfo.objects.get(user=user))
-        group=Group.objects.filter(Q(course_id=course, level=student.level))
-        for g in group:
-            contain = Contain.objects.filter(Q(group_id=g))
-            counter = 0
-            for c in contain:
-                counter = counter + 1
-            if counter<5:
-                contain = Contain.objects.create(group_id=g, unique_id=student)
-                contain.save()
-                flag = 1
-                break
-        if flag == 0:
-            group = Group.objects.create(course_id=course, level=student.level)
-            group.save()
-            contain = Contain.objects.create(group_id=group, unique_id=student)
-            contain.save()
 
 
 def about(request):
@@ -649,7 +607,7 @@ def quiz_reccomend1(x, t):
     else:
         return 0
 
-
+#________________________________________RBM_________________________________________________####
 class RBM:
 
     def __init__(self):
@@ -662,7 +620,7 @@ class RBM:
         for i in range(1, 16):
             row = []
             try:
-                for j in range(0,19):
+                for j in range(0,20):
                     row.append(int(z.cell(i,j+1).value))
 
             except Exception as e:
@@ -670,7 +628,7 @@ class RBM:
                 print(i)
             arr.append(row)
 
-        self.RBMstart(num_visible = 19, num_hidden = 16)
+        self.RBMstart(num_visible = 20, num_hidden = 16)
         training_data = np.array(arr)
         self.train(training_data, max_epochs = 5000)
         e = Enroll.objects.filter(unique_id = s)
