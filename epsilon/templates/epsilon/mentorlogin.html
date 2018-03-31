@@ -1,167 +1,239 @@
 {% load static %}
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="icon" href="{% static 'epsilon/assets/img/favicons/logo.png' %}">
-
-    <title>Login</title>
-
-    <!-- Bootstrap core CSS -->
-    <script src="{% static 'epsilon/assets/js/jquery-3.2.1.slim.min.js' %}"></script>
-    <script src="{% static 'epsilon/assets/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'epsilon/assets/js/popper.min.js' %}"></script>
-    <script src="{% static 'epsilon/assets/js/jquery-3.2.1.slim.min.js' %}"></script>
-    <link rel="stylesheet" type="text/css" href="{% static 'epsilon/assets/css/bootstrap.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'epsilon/assets/css/login.css' %}">
-  </head>
-
-  <body style="background:black">
-
-      <nav class="navbar navbar-expand-lg navbar-black bg-black">
-      <div class="container">
-    <a class="navbar-brand" href="/epsilon"><img src="{% static 'epsilon/assets/img/index/mainnamewhite.png' %}" height=70px /></a>
-
-      <h5 style="color:white">Mentor Login</h5>
-
-      </div>
-      </nav>
-
-<div class="row">
-
-<div class="col-lg-10 offset-lg-1"><hr width=100% style="border : solid white">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="/epsilon/index">Home</a></li>
-          <li class="breadcrumb-item">Login</li>
-        </ol>
-</div>
-</div>
-
-<center>  <div class="container">  <div class="row"><div class="col-lg-4 offset-lg-4">
-      <main role="main">
-              <div class="row"><p></p></div>
-                <div class="row"><p></p></div>
-                  <div class="row"><p></p></div>
-                    <div class="row"><p></p></div>
-                      <div class="row"><p></p></div>
-                        <div class="row"><p></p></div>
-                          <div class="row"><p></p></div>
-        <ul class="nav nav-tabs">
-              <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" href="#login">Login</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#signup">Sign Up</a>
-              </li>
-            </ul>
-            <div id="myTabContent" class="tab-content">
-              <div class="tab-pane fade show active" id="login">
-
-                            <div>
-
-                              <form action="/epsilon/auth" method="POST">
-                                {% csrf_token %}
-                                <fieldset>
-                                <div class="row"><p></p></div>
-                                  <div class="form-group">
-                                    <label for="exampleInputEmail1">Email address</label>
-                                    <input type="text" class="form-control" name="username" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="exampleInputPassword1">Password</label>
-                                    <input type="password" class="form-control" name="password" id="exampleInputPassword1" placeholder="Password">
-
-                                  </div>  <div class="row"><p></p></div>  <div class="row"><p></p></div>
-                                  <button type="submit" class="btn btn-primary ">Submit</button>
-                                </fieldset>
-                              </form>
-
+    <head>
+        <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                <link rel="icon" href="{% static 'epsilon/assets/img/favicons/logo.png' %}">
+                    
+                    <title>Login</title>
+                    
+                    <!-- Bootstrap core CSS -->
+                    <script src="{% static 'epsilon/assets/js/jquery-3.2.1.slim.min.js' %}"></script>
+                    <script src="{% static 'epsilon/assets/js/bootstrap.min.js' %}"></script>
+                    <script src="{% static 'epsilon/assets/js/popper.min.js' %}"></script>
+                    <script src="{% static 'epsilon/assets/js/jquery-3.2.1.slim.min.js' %}"></script>
+                    <link rel="stylesheet" type="text/css" href="{% static 'epsilon/assets/css/bootstrap.css' %}">
+                        </head>
+    
+    <body>
+        
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" href="#">intellistudy</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarColor03">
+                    <img src="{% static 'epsilon/assets/img/logo_2.png' %}" height=40px />
+                    
+                    <ul class="nav justify-content-end">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/epsilon/about">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/epsilon/about#members">Contact</a>
+                        </li>
+                    </ul>
+                    
+                    
+                    <input type="button" value="+A" class="increaseFont">
+                        <input type="button" value="-A" class="decreaseFont">
+                            
+                            <!--
+                             <form class="form-inline my-2 my-lg-0">
+                             <input class="form-control mr-sm-2" type="text" placeholder="Search">
+                             <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                             </form>
+                             -->
                             </div>
-
-              </div>
-              <div class="tab-pane fade" id="signup">
-
-                            <div>
-
-                              <form action="/epsilon/signup" method="POST">
-                                {% csrf_token %}
-                                <fieldset>
-                                <div class="row"><p></p></div>
-                                    <div class="form-group">
-                                      <div class="form-group">
-                                      <label class="col-form-label" for="inputDefault">First Name</label>
-                                      <input type="text" class="form-control" name="fname" placeholder="Enter first name" id="inputDefault">
-                                      <label class="col-form-label" for="inputDefault1">Last Name</label>
-                                      <input type="text" class="form-control" name="lname" placeholder="Enter last name" id="inputDefault1">
-                                      </div>
-                                    <div class="form-group">
-                                    <label class="col-form-label" for="inputDefault">Username</label>
-                                    <input type="text" class="form-control" name="username" placeholder="Enter your username" id="inputDefault">
-                                    </div>
-                                  <div class="form-group">
-                                    <label for="exampleInputEmail1">Email address</label>
-                                    <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Your Email">
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="exampleInputPassword1">Password</label>
-                                    <input type="password" class="form-control" name="password" id="exampleInputPassword1" placeholder="Enter Strong Password">
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="exampleInputPassword2">Confirm Password</label>
-                                    <input type="password" class="form-control" name="password" id="exampleInputPassword2" placeholder="Re-enter Password">
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="exampleselect1">Gender</label>
-                                    <select class="custom-select" name="gender" id="exampleselect1">
-                                        <option selected=""></option>
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                        <option value="Other">Other</option>
-                                    </select>
-                                    </div>
-                                    <div class="form-group">
-                                    <label for="exampledate1">Date of Birth</label>
-                                    <input type="date" class="form-control" placeholder="Enter DOB" name="dob"
-                                    id="exampledate1">
-                                    </div>
-                                    <div class="form-group">
-                                    <label for="exampleselect2">Job</label>
-                                    <select class="custom-select" name="job" id="exampleselect2">
-                                        <option selected=""></option>
-                                        <option value="Intern">Intern</option>
-                                        <option value="Entry level (0-2 yrs)">Entry level (0-2 yrs)</option>
-                                        <option value="Mid level (2+ yrs)">Mid level (2+ yrs)</option>
-                                        <option value="Manager">Manager</option>
-                                        <option value="Executive">Executive</option>
-                                        <option value="Not Applicable">Not Applicable</option>
-                                    </select>
-                                    </div>
-
-                                  <div class="form-group">
-                                    <label for="exampleselect3">Qualification</label>
-                                    <select class="custom-select" name="qualification"
-
-                                    id="exampleselect3">
-                                        <option selected=""></option>
-                                        <option value="Below High School">Below High School</option>
-                                        <option value="High School">High School</option>
-                                        <option value="Bachelor Degree">Bachelor Degree</option>
-                                        <option value="Master Degree">Master Degree</option>
-                                        <option value="Doctrate Degree">Doctrate Degree</option>
-                                    </select>
-                                  </div>
-                                  <button type="submit" name="mentor" class="btn btn-primary">Submit</button>
-                                </fieldset>
-                              </form>
-
-                            </div>
-              </div>
             </div>
-      </main>  </div></div></div></center>
-
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="{% static '../../../../epsilon/assets/js/vendor/jquery-slim.min.js' %}"><\/script>')</script>
-  </body>
+        </nav>
+        
+        <div class="row">
+            
+            <div class="col-lg-10 offset-lg-1">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/epsilon/index">Home</a></li>
+                    <li class="breadcrumb-item">Login</li>
+                </ol>
+            </div>
+        </div>
+        
+        <center>  <div class="container">
+            <div class="row">
+                <div class="col-lg-4 offset-lg-4">
+                    <main role="main">
+                        <div class="row"><p></p></div>
+                        <div class="row"><p></p></div>
+                        <div class="row"><p></p></div>
+                        <div class="row"><p></p></div>
+                        <div class="row"><p></p></div>
+                        <div class="row"><p></p></div>
+                        <div class="row"><p></p></div>
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#signup">Sign Up</a>
+                            </li>
+                        </ul>
+                        <div id="myTabContent" class="tab-content">
+                            <div class="tab-pane fade show active" id="login">
+                                
+                                <div>
+                                    
+                                    <form action="/epsilon/auth" method="POST">
+                                        {% csrf_token %}
+                                        <fieldset>
+                                            <div class="row"><p></p></div>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Email address</label>
+                                                <input type="text" class="form-control" name="username" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                                                    
+                                                    </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputPassword1">Password</label>
+                                                <input type="password" class="form-control" name="password" id="exampleInputPassword1" placeholder="Password">
+                                                    
+                                                    </div>  <div class="row"><p></p></div>  <div class="row"><p></p></div>
+                                            <button type="submit" class="btn btn-primary ">Submit</button>
+                                        </fieldset>
+                                    </form>
+                                    
+                                </div>
+                                
+                            </div>
+                            <div class="tab-pane fade" id="signup">
+                                
+                                <div>
+                                    
+                                    <form action="/epsilon/signup" method="POST">
+                                        {% csrf_token %}
+                                        <fieldset>
+                                            <div class="row"><p></p></div>
+                                            <div class="form-group">
+                                                <div class="form-group">
+                                                    <label class="col-form-label" for="inputDefault">First Name</label>
+                                                    <input type="text" class="form-control" name="fname" placeholder="Enter first name" id="inputDefault">
+                                                        <label class="col-form-label" for="inputDefault1">Last Name</label>
+                                                        <input type="text" class="form-control" name="lname" placeholder="Enter last name" id="inputDefault1">
+                                                            </div>
+                                                <div class="form-group">
+                                                    <label class="col-form-label" for="inputDefault">Username</label>
+                                                    <input type="text" class="form-control" name="username" placeholder="Enter your username" id="inputDefault">
+                                                        </div>
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1">Email address</label>
+                                                    <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Your Email">
+                                                        </div>
+                                                <div class="form-group">
+                                                    <label for="exampleInputPassword1">Password</label>
+                                                    <input type="password" class="form-control" name="password" id="exampleInputPassword1" placeholder="Enter Strong Password">
+                                                        </div>
+                                                <div class="form-group">
+                                                    <label for="exampleInputPassword2">Confirm Password</label>
+                                                    <input type="password" class="form-control" name="password" id="exampleInputPassword2" placeholder="Re-enter Password">
+                                                        </div>
+                                                <div class="form-group">
+                                                    <label for="exampleselect1">Gender</label>
+                                                    <select class="custom-select" name="gender" id="exampleselect1">
+                                                        <option selected=""></option>
+                                                        <option value="Male">Male</option>
+                                                        <option value="Female">Female</option>
+                                                        <option value="Other">Other</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="exampledate1">Date of Birth</label>
+                                                    <input type="date" class="form-control" placeholder="Enter DOB" name="dob"
+                                                        id="exampledate1">
+                                                        </div>
+                                                <div class="form-group">
+                                                    <label for="exampleselect2">Job</label>
+                                                    <select class="custom-select" name="job" id="exampleselect2">
+                                                        <option selected=""></option>
+                                                        <option value="Intern">Intern</option>
+                                                        <option value="Entry level (0-2 yrs)">Entry level (0-2 yrs)</option>
+                                                        <option value="Mid level (2+ yrs)">Mid level (2+ yrs)</option>
+                                                        <option value="Manager">Manager</option>
+                                                        <option value="Executive">Executive</option>
+                                                        <option value="Not Applicable">Not Applicable</option>
+                                                    </select>
+                                                </div>
+                                                
+                                                <div class="form-group">
+                                                    <label for="exampleselect3">Qualification</label>
+                                                    <select class="custom-select" name="qualification"
+                                                        
+                                                        id="exampleselect3">
+                                                        <option selected=""></option>
+                                                        <option value="Below High School">Below High School</option>
+                                                        <option value="High School">High School</option>
+                                                        <option value="Bachelor Degree">Bachelor Degree</option>
+                                                        <option value="Master Degree">Master Degree</option>
+                                                        <option value="Doctrate Degree">Doctrate Degree</option>
+                                                    </select>
+                                                </div>
+                                                <button type="submit" name="mentor" class="btn btn-primary">Submit</button>
+                                            </div>
+                                        </fieldset>
+                                    </form>
+                                    
+                                    
+                                </div>
+                            </div></div>
+                    </main>  </div><div class="col-4"></div></div></div></center>
+        <div class="container-fluid">
+            <div class="container" style="height:100"><br><br><br><br><br><br><br><br></div>
+            <br>
+            <div class="btm_logoWrap">
+                <div class="container">
+                    <div class="btm_logo"> <div class="region region-footer-logo">
+                        <div id="block-block-137" class="block block-block" role="contentinfo">
+                            
+                            
+                            <div class="row">
+                                <div class="container">
+                                    <a href="https://india.gov.in/" target="_blank" title="india.gov.in"><img alt="india.gov.in" height="51" src="{% static 'epsilon/assets/img/india_gov_logo.png' %}" width="137"></a>
+                                    <a href="http://mygov.in/" target="_blank" title="MyGov.in"><img alt="MyGov.in" height="51" src="{% static 'epsilon/assets/img/my_gov_logo.png' %}" width="61"></a>
+                                    <a href="http://evisitors.nic.in/public/Home.aspx" target="_blank" title="MyVisit"><img alt="MyVisit" height="51" src="{% static 'epsilon/assets/img/my_visit.png' %}" width="98"></a>
+                                    <a href="http://digitalindia.gov.in/" target="_blank" title="Digital India"><img alt="Digital India" height="51" src="{% static 'epsilon/assets/img/digital_india.png' %}" width="78"></a>
+                                    <a href="rti_he" title="Right to Information"><img alt="Right to Information" height="51" src="{% static 'epsilon/assets/img/rti_logo.png' %}" width="78"></a>
+                                    <a href="https://data.gov.in/" target="_blank" title="data.gov.in"><img alt="data.gov.in" height="51" src="{% static 'epsilon/assets/img/datagov_logo.png' %}" width="110"></a>
+                                    <a href="http://www.nvsp.in/" target="_blank" title="Online Services for Voters"><img alt="Online Services for Voters" height="51" src="{% static 'epsilon/assets/img/onlineservice_logo.png' %}" width="113"></a>
+                                    <a href="http://dial.gov.in/" target="_blank" title="Dial.gov"><img alt="Dial.gov" height="51" src="{% static 'epsilon/assets/img/dialgov-logo.png' %}" width="64"></a>
+                                    <a href="http://ssashagun.nic.in/" target="_blank" title="ssa.gov"><img alt="ssa" height="51" src="{% static 'epsilon/assets/img/ssa_schm.jpg' %}" width="112"></a>
+                                    <a href="http://mdm.nic.in/" target="_blank" title="Mid Day Meal"><img alt="Mid Day Meal" height="51" src="{% static 'epsilon/assets/img/mdm_schm.jpg' %}" width="112"></a>
+                                    <a href="http://103.7.128.243:8085/swachhvidhyalaya/" target="_blank" title="MHRD"><img src="{% static 'epsilon/assets/img/swachh-vidyalay.png' %}" alt="" class="img-responsive"></a>
+                                </div>
+                            </div>
+                            
+                        </div> <!-- /.block -->
+                    </div>
+                    <!-- /.region -->
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12"><hr style=" border: 0.5px solid #3d3d3d;">
+                        <ul class="list-unstyled">
+                            <li class="float-lg-right"><a href="#top">Back to top</a></li>
+                            <li><a href="/epsilon/about">About</a></li>
+                            <li><a href="https://github.com/gautamyadavs/IntelliStudy">Source | GitHub</a></li>
+                            <li><a href="/epsilon/admin">Admin</a></li>
+                        </ul>
+                        <center><p>Made with <img src="{% static 'epsilon/assets/img/index/heart.png' %}" width=18px /> by <a href="/epsilon/about">Team Epsilon</a>.</p></center>
+                    </div>
+                </div>
+                
+            </div>
+            
+        </div>
+        
+        
+    </body>
 </html>
