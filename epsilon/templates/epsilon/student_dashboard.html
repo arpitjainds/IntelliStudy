@@ -95,25 +95,7 @@
             </div>
             
             <br>
-            <div class="text-center"><h3>Recommended Path</h3></div><br>
-            <div class="container">
-                <div class="row">
-                    {% for q in recommended %}
-                    <div class="col-3">
-                <form action=/epsilon/career method="post" class="ui form" role="form">
-                    {% csrf_token %}
-                    <button style=" background:white;border:0px" name="career" value="{{q.pk }}" type="submit">
-                <div class="col-2">{% if q.career_picture %}<img src="{{ q.career_picture.url }}" width="165" height="165" border="10">{% else %}<img src="{% static 'epsilon/assets/img/index/default.jpg' %}" width="165" height="165" border="10">{% endif %}<p class="text-center">{{q.name}}</p></div>
-                <!-- <div class="col-2"><a href="#"><img src="{% static 'epsilon/assets/img/path/science.png' %}" width="165" height="165" border="10"><p class="text-center">Science</p></a></div>
-                <div class="col-2"><a href="#"><img src="{% static 'epsilon/assets/img/path/vr.png' %}" width="165" height="165" border="10"><p class="text-center">Virtual Reality</p></a></div>
-                <div class="col-2"><a href="#"><img src="{% static 'epsilon/assets/img/path/dscience.png' %}" width="165" height="165" border="10"><p class="text-center">Data Science</p></a></div> -->
-                
-                    </button></form>
-                </div>
-                    {% endfor %}
-                </div>
-                </div>
-
+            <div class="row"><div class="col-lg-8" style="border-right:0.5px solid #d3d3d3">
             <br>
 
             <div class="text-center"><h3>Career Path</h3></div><br>
@@ -158,6 +140,33 @@
 
           </div>
               <div class="col-lg-4">
+
+                    <center><h3>Recommended Career Paths</h3></center><br><br>
+
+                <div class="list-group" style="padding-left:20px; padding-right:20px">
+                    {% for q in recommended %}
+                    <form action=/epsilon/career method="post" class="ui form" role="form">
+                        {% csrf_token %}
+                    <button value="{{q.pk }}" type="submit" class="list-group-item list-group-item-action flex-column align-items-start">
+                      <div class="d-flex w-100 justify-content-between">
+                            <div class="row"><div class="col-lg-3">
+                            <p class="mb-1">
+                                {% if q.career_picture %}
+                                <img src="{{ q.career_picture.url }}" width="40" height="40" border="0">
+                                {% else %}
+                                <img src="{% static 'epsilon/assets/img/index/default.jpg' %}" width="40" height="40" border="0">
+                                {% endif %}
+                            </p></div><div class="col-lg-9">
+                            <p class="text-center">{{q.name}}</p>
+                        </div>
+                        </div>
+                      </div>
+                      
+                    </button>
+                </form>
+                    {% endfor %}
+                  </div>
+
 
                 <center><h3>Recommended Courses</h3></center><br><br>
                 <center><span class="badge badge-info">You Might find These Easy.</span></center><br>
