@@ -147,7 +147,7 @@
                     {% for q in recommended %}
                     <form action=/epsilon/career method="post" class="ui form" role="form">
                         {% csrf_token %}
-                    <button value="{{q.pk }}" type="submit" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <button name="career" value="{{q.pk }}" type="submit" class="list-group-item list-group-item-action flex-column align-items-start">
                       <div class="d-flex w-100 justify-content-between">
                             <div class="row"><div class="col-lg-3">
                             <p class="mb-1">
