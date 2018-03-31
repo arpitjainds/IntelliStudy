@@ -886,7 +886,7 @@ class RBM:
 
 # starts from here
 def recommender_related(rec_for):
-    users = Stuednts.objects.all()  # TODO: Change this to total number of students in the db
+    users = Students.objects.all()  # TODO: Change this to total number of students in the db
     items = 19  # TODO: Change this to total number of courses in the db
     recommend_data = open("/Users/gautam/Desktop/IntelliStudy/grades.csv","w") # TODO: Change this address get grades from scores and store into a csv and avg based on courses
     courses = Course.objects.all()
