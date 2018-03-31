@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^editquiz', views.editquiz, name='editquiz'),
     url(r'^editcourse', views.editcourse, name='editcourse'),
     url(r'^apt', views.apt, name='apt'),
+    url(r'^reco', views.reco, name='reco'),
     ]

@@ -4,6 +4,15 @@ import numpy as np
 import datetime
 import pytz
 from dateutil import parser
+import scipy.stats
+import scipy.spatial
+from sklearn.cross_validation import KFold
+import random
+from sklearn.metrics import mean_squared_error
+from math import sqrt
+import math
+import warnings
+import sys
 
 
 from django.shortcuts import render, redirect
@@ -13,7 +22,7 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.contrib.auth.models import User
-from django.db.models import Q
+from django.db.models import Q, Count, Avg
 from .models import (Course, Enroll, Student, Mentor, Question, ExtraInfo, Content, Manage, Score,
                      File, Option, Contain, Group, Career, Has)
 from .forms import AddSubtopic
@@ -120,7 +129,7 @@ def mentor(request):
 
 
 @login_required
-def dashboard(request):    
+def dashboard(request):
     user = request.user
     s= Student.objects.get(unique_id=ExtraInfo.objects.get(user=user))
     courses = Course.objects.all()
@@ -394,6 +403,13 @@ def loggedout(request):
 
 
 @login_required
+def reco(request):
+    user = request.user
+    high1, high2, low1, low2 = recommender_related(user)
+    return redirect('/epsilon/reco')
+
+
+@login_required
 def apt(request):
     if 'join' in request.POST:
         cid = request.POST.get('join')
@@ -632,15 +648,13 @@ def quiz_reccomend1(x, t):
         return 1
     else:
         return 0
-=======
 
-#_________________RBM for recommending course according to career and courses taken by student__________________#
 
 class RBM:
 
     def __init__(self):
         skillexcel= xlrd.open_workbook(os.path.join(os.getcwd(), 'data1.xlsx'))
-    
+
     def RBMx(self,s):
         skillexcel= xlrd.open_workbook(os.path.join(os.getcwd(), 'data1.xlsx'))
         z = skillexcel.sheet_by_index(0)
@@ -668,7 +682,7 @@ class RBM:
                 a.append(1)
             else:
                 a.append(0)
-        
+
         q = []
         print(a)
         user = np.array([a])
@@ -687,10 +701,10 @@ class RBM:
 
         # Initialize a weight matrix, of dimensions (num_visible x num_hidden), using
         # a uniform distribution between -sqrt(6. / (num_hidden + num_visible))
-        # and sqrt(6. / (num_hidden + num_visible)). One could vary the 
+        # and sqrt(6. / (num_hidden + num_visible)). One could vary the
         # standard deviation by multiplying the interval with appropriate value.
-        # Here we initialize the weights with mean 0 and standard deviation 0.1. 
-        # Reference: Understanding the difficulty of training deep feedforward 
+        # Here we initialize the weights with mean 0 and standard deviation 0.1.
+        # Reference: Understanding the difficulty of training deep feedforward
         # neural networks by Xavier Glorot and Yoshua Bengio
         np_rng = np.random.RandomState(1234)
 
@@ -709,7 +723,7 @@ class RBM:
         Train the machine.
         Parameters
         ----------
-        data: A matrix where each row is a training example consisting of the states of visible units.    
+        data: A matrix where each row is a training example consisting of the states of visible units.
         """
 
         num_examples = data.shape[0]
@@ -717,15 +731,15 @@ class RBM:
         # Insert bias units of 1 into the first column.
         data = np.insert(data, 0, 1, axis = 1)
 
-        for epoch in range(max_epochs):      
-            # Clamp to the data and sample from the hidden units. 
+        for epoch in range(max_epochs):
+            # Clamp to the data and sample from the hidden units.
             # (This is the "positive CD phase", aka the reality phase.)
-            pos_hidden_activations = np.dot(data, self.weights)      
+            pos_hidden_activations = np.dot(data, self.weights)
             pos_hidden_probs = self._logistic(pos_hidden_activations)
             pos_hidden_probs[:,0] = 1 # Fix the bias unit.
             pos_hidden_states = pos_hidden_probs > np.random.rand(num_examples, self.num_hidden + 1)
-            # Note that we're using the activation *probabilities* of the hidden states, not the hidden states       
-            # themselves, when computing associations. We could also use the states; see section 3 of Hinton's 
+            # Note that we're using the activation *probabilities* of the hidden states, not the hidden states
+            # themselves, when computing associations. We could also use the states; see section 3 of Hinton's
             # "A Practical Guide to Training Restricted Boltzmann Machines" for more.
             pos_associations = np.dot(data.T, pos_hidden_probs)
 
@@ -736,7 +750,7 @@ class RBM:
             neg_visible_probs[:,0] = 1 # Fix the bias unit.
             neg_hidden_activations = np.dot(neg_visible_probs, self.weights)
             neg_hidden_probs = self._logistic(neg_hidden_activations)
-            # Note, again, that we're using the activation *probabilities* when computing associations, not the states 
+            # Note, again, that we're using the activation *probabilities* when computing associations, not the states
             # themselves.
             neg_associations = np.dot(neg_visible_probs.T, neg_hidden_probs)
 
@@ -833,7 +847,7 @@ class RBM:
         daydreaming.
         """
 
-        # Create a matrix, where each row is to be a sample of of the visible units 
+        # Create a matrix, where each row is to be a sample of of the visible units
         # (with an extra bias unit), initialized to all ones.
         samples = np.ones((num_samples, self.num_visible + 1))
 
@@ -849,7 +863,7 @@ class RBM:
             visible = samples[i-1,:]
 
             # Calculate the activations of the hidden units.
-            hidden_activations = np.dot(visible, self.weights)      
+            hidden_activations = np.dot(visible, self.weights)
             # Calculate the probabilities of turning the hidden units on.
             hidden_probs = self._logistic(hidden_activations)
             # Turn the hidden units on with their specified probabilities.
@@ -864,10 +878,234 @@ class RBM:
             samples[i,:] = visible_states
 
         # Ignore the bias units (the first column), since they're always set to 1.
-        return samples[:,1:]        
-        
+        return samples[:,1:]
+
     def _logistic(self, x):
-        return 1.0 / (1 + np.exp(-x))    
+        return 1.0 / (1 + np.exp(-x))
 
-#_________________________________END______________________________________#
 
+# starts from here
+def recommender_related(rec_for):
+    users = Stuednts.objects.all()  # TODO: Change this to total number of students in the db
+    items = 19  # TODO: Change this to total number of courses in the db
+    recommend_data = open("/Users/gautam/Desktop/IntelliStudy/grades.csv","w") # TODO: Change this address get grades from scores and store into a csv and avg based on courses
+    courses = Course.objects.all()
+    students = Student.objects.all()
+    for c in courses:
+        for student in students:
+            sc = Score.objects.filter(Q(unique_id=student, content_id=Content.objects.filter(Q(course_id=c)))).aggregate(Avg('marks')).values()
+            recommend_data.write(str(student.unique_id.pk) + "," + str(c.pk) + "," + str(sc) + "\n")
+    recommend_data.close()
+    high1, high2, low1, low2 = predictRating(recommend_data, users, items, rec_for)
+    return high1, high2, low1, low2
+
+
+def readingFile(filename):
+    f = open(filename,"r")
+    data = []
+    for row in f:
+        r = row.split(',')
+        e = [int(r[0]), int(r[1]), int(r[2])]
+        data.append(e)
+    return data
+
+
+def predictRating(recommend_data, users, items, rec_for):
+    M, sim_user = crossValidation(recommend_data, users, items)
+    pred_low1 = 10
+    pred_low2 = 10
+    pred_high1 = 0
+    pred_high2 = 0
+    f = open("/Users/gautam/Desktop/IntelliStudy/toBeGraded.csv","r")  # TODO: Change this address to the courses not enrolled
+    #f = open(sys.argv[2],"r")
+    items = Enroll.objects.filter(Q(unique_id_id=user))
+    toBeRated = {"user":[], "item":[]}
+    for i in items:
+        toBeRated["item"].append(int(i.pk))
+        toBeRated["user"].append(rec_for)
+
+    f.close()
+
+    pred_rate = []
+
+    #fw = open('result1.csv','w')
+    fw_w = open('/Users/gautam/Desktop/IntelliStudy/result1.csv','w')  # TODO: Change this to return the results
+
+    l = len(toBeRated["user"])
+    for e in range(l):
+        user = toBeRated["user"][e]
+        item = toBeRated["item"][e]
+
+        pred = 5.0
+
+        #user-based
+        if np.count_nonzero(M[user-1]):
+            sim = sim_user[user-1]
+            ind = (M[:,item-1] > 0)
+            #ind[user-1] = False
+            normal = np.sum(np.absolute(sim[ind]))
+            if normal > 0:
+                pred = np.dot(sim,M[:,item-1])/normal
+
+        if pred < 0:
+            pred = 0
+
+        if pred > 10:
+            pred = 10
+
+        pred_rate.append(pred)
+
+        if(pred<pred_low1):
+            pred_low1=pred
+            low1 = item
+        elif (pred<pred_low2):
+            pred_low2=pred
+            low2 = item
+
+        if (pred > pred_high1):
+            pred_high1 = pred
+            high1 = item
+        elif (pred > pred_high2):
+            pred_high2 = pred
+            high2 = item
+
+        print (str(user) + "," + str(item) + "," + str(pred))
+        #fw.write(str(user) + "," + str(item) + "," + str(pred) + "\n")
+        fw_w.write(str(item) + "," + str(pred) + "\n")                      #   this is how you make csv
+
+    #fw.close()
+    fw_w.close()
+    return high1, high2, low1, low2
+
+def crossValidation(data, users, items):
+    k_fold = KFold(n=len(data), n_folds=10)
+
+    Mat = np.zeros((users,items))
+    for e in data:
+        Mat[e[0]-1][e[1]-1] = e[2]
+
+    sim_user_cosine, sim_user_jaccard, sim_user_pearson = similarity_user(Mat, users, items)
+
+    rmse_cosine = []
+    rmse_jaccard = []
+    rmse_pearson = []
+
+    for train_indices, test_indices in k_fold:
+        train = [data[i] for i in train_indices]
+        test = [data[i] for i in test_indices]
+
+        M = np.zeros((users,items))
+
+        for e in train:
+            M[e[0]-1][e[1]-1] = e[2]
+
+        true_rate = []
+        pred_rate_cosine = []
+        pred_rate_jaccard = []
+        pred_rate_pearson = []
+
+        for e in test:
+            user = e[0]
+            item = e[1]
+            true_rate.append(e[2])
+
+            pred_cosine = 5.0
+            pred_jaccard = 5.0
+            pred_pearson = 5.0
+
+            #user-based
+            if np.count_nonzero(M[user-1]):
+                sim_cosine = sim_user_cosine[user-1]
+                sim_jaccard = sim_user_jaccard[user-1]
+                sim_pearson = sim_user_pearson[user-1]
+                ind = (M[:,item-1] > 0)
+                #ind[user-1] = False
+                normal_cosine = np.sum(np.absolute(sim_cosine[ind]))
+                normal_jaccard = np.sum(np.absolute(sim_jaccard[ind]))
+                normal_pearson = np.sum(np.absolute(sim_pearson[ind]))
+                if normal_cosine > 0:
+                    pred_cosine = np.dot(sim_cosine,M[:,item-1])/normal_cosine
+
+                if normal_jaccard > 0:
+                    pred_jaccard = np.dot(sim_jaccard,M[:,item-1])/normal_jaccard
+
+                if normal_pearson > 0:
+                    pred_pearson = np.dot(sim_pearson,M[:,item-1])/normal_pearson
+
+            if pred_cosine < 0:
+                pred_cosine = 0
+
+            if pred_cosine > 10:
+                pred_cosine = 10
+
+            if pred_jaccard < 0:
+                pred_jaccard = 0
+
+            if pred_jaccard > 10:
+                pred_jaccard = 10
+
+            if pred_pearson < 0:
+                pred_pearson = 0
+
+            if pred_pearson > 10:
+                pred_pearson = 10
+
+            print (str(user) + "\t" + str(item) + "\t" + str(e[2]) + "\t" + str(pred_cosine) + "\t" + str(pred_jaccard) + "\t" + str(pred_pearson))
+            pred_rate_cosine.append(pred_cosine)
+            pred_rate_jaccard.append(pred_jaccard)
+            pred_rate_pearson.append(pred_pearson)
+
+        rmse_cosine.append(sqrt(mean_squared_error(true_rate, pred_rate_cosine)))
+        rmse_jaccard.append(sqrt(mean_squared_error(true_rate, pred_rate_jaccard)))
+        rmse_pearson.append(sqrt(mean_squared_error(true_rate, pred_rate_pearson)))
+
+        print (str(sqrt(mean_squared_error(true_rate, pred_rate_cosine))) + "\t" + str(sqrt(mean_squared_error(true_rate, pred_rate_jaccard))) + "\t" + str(sqrt(mean_squared_error(true_rate, pred_rate_pearson))))
+        #raw_input()
+
+    #print sum(rms) / float(len(rms))
+    rmse_cosine = sum(rmse_cosine) / float(len(rmse_cosine))
+    rmse_pearson = sum(rmse_pearson) / float(len(rmse_pearson))
+    rmse_jaccard = sum(rmse_jaccard) / float(len(rmse_jaccard))
+
+    print (str(rmse_cosine) + "\t" + str(rmse_jaccard) + "\t" + str(rmse_pearson))
+
+    f_rmse = open("rmse_user.txt","w")
+    f_rmse.write(str(rmse_cosine) + "\t" + str(rmse_jaccard) + "\t" + str(rmse_pearson) + "\n")
+
+    rmse = [rmse_cosine, rmse_jaccard, rmse_pearson]
+    req_sim = rmse.index(min(rmse))
+
+    print (req_sim)
+    f_rmse.write(str(req_sim))
+    f_rmse.close()
+
+    if req_sim == 0:
+        sim_mat_user = sim_user_cosine
+
+    if req_sim == 1:
+        sim_mat_user = sim_user_jaccard
+
+    if req_sim == 2:
+        sim_mat_user = sim_user_pearson
+
+    #predictRating(Mat, sim_mat_user)
+    return Mat, sim_mat_user
+
+def similarity_user(data, users, items):
+    user_similarity_cosine = np.zeros((users,users))
+    user_similarity_jaccard = np.zeros((users,users))
+    user_similarity_pearson = np.zeros((users,users))
+    for user1 in range(users):
+        print (user1)
+        for user2 in range(users):
+            if np.count_nonzero(data[user1]) and np.count_nonzero(data[user2]):
+                user_similarity_cosine[user1][user2] = 1-scipy.spatial.distance.cosine(data[user1],data[user2])
+                user_similarity_jaccard[user1][user2] = 1-scipy.spatial.distance.jaccard(data[user1],data[user2])
+                try:
+                    if not math.isnan(scipy.stats.pearsonr(data[user1],data[user2])[0]):
+                        user_similarity_pearson[user1][user2] = scipy.stats.pearsonr(data[user1],data[user2])[0]
+                    else:
+                        user_similarity_pearson[user1][user2] = 0
+                except:
+                    user_similarity_pearson[user1][user2] = 0
+    return user_similarity_cosine, user_similarity_jaccard, user_similarity_pearson
