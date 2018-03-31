@@ -789,14 +789,49 @@ class RBM:
         hidden_activations = np.dot(data, self.weights)
         # Calculate the probabilities of turning the hidden units on.
         hidden_probs = self._logistic(hidden_activations)
-        m = hidden_probs.argmax()
-        # Turn the hidden units on with their specified probabilities.
-        hidden_states[:,:] = hidden_probs > np.random.rand(num_examples, self.num_hidden + 1)
-        # Always fix the bias unit to 1.
-        # hidden_states[:,0] = 1
 
+        max1 =0
+        pos1 =0
+        for h in hidden_probs:
+            for i in range(len(h)-1):
+                if h[i]> max1:
+                    max1 = h[i]
+                    pos1 = i
+        max2 =0
+        pos2 =0
+        for h in hidden_probs:
+            for i in range(len(h)-1):
+                if h[i]> max2 and h[i]!=max1:
+                    max2 = h[i]
+                    pos2 = i
+        max3 =0
+        pos3 =0
+        for h in hidden_probs:
+            for i in range(len(h)-1):
+                if h[i]> max3 and h[i]!= max1 and h[i]!=max2:
+                    max3 = h[i]
+                    pos3 = i
+        
+        print (hidden_probs)
+        print(pos1)
+        print(pos2)
+        print(pos3)        
+        
+        for h in hidden_states:
+            for i in range(len(h)-1):
+                if i==pos1 or i==pos2 or i==pos3:
+                    h[i+1]=1
+                else:
+                    h[i+1]=0
+        print(hidden_states)
+        
+        # Turn the hidden units on with their specified probabilities.
+        # hidden_states[:,:] = hidden_probs > np.random.rand(num_examples, self.num_hidden + 1)
+        # Always fix the bias unit to 1.
+        #hidden_states[:,0] = 1
         # Ignore the bias units.
         hidden_states = hidden_states[:,1:]
+        print(hidden_states)
         return hidden_states
 
     # TODO: Remove the code duplication between this method and `run_visible`?
