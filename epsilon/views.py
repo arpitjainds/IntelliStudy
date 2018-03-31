@@ -927,14 +927,18 @@ def recommender_related(rec_for):
         count = count + 1
     users = count
     items = 19  # TODO: Change this to total number of courses in the db
-    recommend_data = open("/Users/gautam/Desktop/IntelliStudy/grades.csv","w") # TODO: Change this address get grades from scores and store into a csv and avg based on courses
+    recommend_data1 = open("/Users/gautam/Desktop/IntelliStudy/grades.csv","w") # TODO: Change this address get grades from scores and store into a csv and avg based on courses
     courses = Course.objects.all()
     students = Student.objects.all()
     for c in courses:
         for student in students:
             sc = Score.objects.filter(Q(unique_id=student, content_id=Content.objects.filter(Q(course_id=c)))).aggregate(Avg('marks')).values()
-            recommend_data.write(str(student.unique_id.pk) + "," + str(c.pk) + "," + str(sc) + "\n")
-    recommend_data.close()
+            for s in sc:
+                if s:
+                    if s != -1:
+                        recommend_data1.write(str(student.unique_id.pk) + "," + str(c.pk) + "," + str(int(s)) + "\n")
+    recommend_data1.close()
+    recommend_data = readingFile("/Users/gautam/Desktop/IntelliStudy/grades.csv")
     high1, high2, low1, low2 = predictRating(recommend_data, users, items, rec_for)
     return high1, high2, low1, low2
 
