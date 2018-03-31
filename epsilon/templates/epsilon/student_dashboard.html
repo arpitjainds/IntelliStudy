@@ -94,7 +94,28 @@
             </div>
             </div>
             
-            <div class="container"><p><br><br></p></div>
+            <br>
+            <div class="text-center"><h3>Recommended Path</h3></div><br>
+            <div class="container">
+                <div class="row">
+                    {% for q in recommended %}
+                    <div class="col-3">
+                <form action=/epsilon/career method="post" class="ui form" role="form">
+                    {% csrf_token %}
+                    <button style=" background:white;border:0px" name="career" value="{{q.pk }}" type="submit">
+                <div class="col-2">{% if q.career_picture %}<img src="{{ q.career_picture.url }}" width="165" height="165" border="10">{% else %}<img src="{% static 'epsilon/assets/img/index/default.jpg' %}" width="165" height="165" border="10">{% endif %}<p class="text-center">{{q.name}}</p></div>
+                <!-- <div class="col-2"><a href="#"><img src="{% static 'epsilon/assets/img/path/science.png' %}" width="165" height="165" border="10"><p class="text-center">Science</p></a></div>
+                <div class="col-2"><a href="#"><img src="{% static 'epsilon/assets/img/path/vr.png' %}" width="165" height="165" border="10"><p class="text-center">Virtual Reality</p></a></div>
+                <div class="col-2"><a href="#"><img src="{% static 'epsilon/assets/img/path/dscience.png' %}" width="165" height="165" border="10"><p class="text-center">Data Science</p></a></div> -->
+                
+                    </button></form>
+                </div>
+                    {% endfor %}
+                </div>
+                </div>
+
+            <br>
+
             <div class="text-center"><h3>Career Path</h3></div><br>
             <div class="container">
                 <div class="row">
